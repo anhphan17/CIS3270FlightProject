@@ -52,6 +52,7 @@ public class Reservation {
             }
 
         }
+        return "No matching trip found to delete";
     }
 }
 /**Be able to book a flight and add that to his account.
