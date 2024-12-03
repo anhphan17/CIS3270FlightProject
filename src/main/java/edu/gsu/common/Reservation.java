@@ -52,8 +52,8 @@ public class Reservation {
             }
 
         }
-    }}
+    }
+}
 /**Be able to book a flight and add that to his account.
  7.3. Be able to delete a flight from his account.
  7.4. Customer should not be able to book same flight more than once**/
-}
