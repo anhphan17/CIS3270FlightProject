@@ -1,6 +1,9 @@
 module org.example.cis3270projectjavafx {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
+
+    exports edu.gsu.gui;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
