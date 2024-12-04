@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class Admin extends User {
     // Constructor
-    public Admin(int userId, String name, String email, String password) {
-        super(userId, name, email, password);
+    public Admin(int userId, String firstName, String lastName, String username, String password, String email) {
+        super(userId,firstName,lastName,username,password,email);
     }
 
     // Method to add a new flight
