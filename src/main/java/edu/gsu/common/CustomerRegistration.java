@@ -47,13 +47,13 @@ public class CustomerRegistration {
 
         Scanner scan9 = new Scanner(System.in);
         System.out.println("Enter a security question");
-        String securityquestion = scan9.nextLine();
-        customer.setSecurityQuestion(securityquestion);
+        String securityQuestion = scan9.nextLine();
+        customer.setSecurityQuestion(securityQuestion);
 
         Scanner scan10 = new Scanner(System.in);
         System.out.println("Enter the answer to the security question");
-        String securityQanswer = scan10.nextLine();
-        customer.setSecurityAnswer(securityQanswer);
+        String securityAnswer = scan10.nextLine();
+        customer.setSecurityAnswer(securityAnswer);
 
     }
 
