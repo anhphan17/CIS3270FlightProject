@@ -8,6 +8,7 @@ public class Reservation {
 
     //list of reservations
     private static final ArrayList<Reservation> reservationList = new ArrayList<>();
+    private static int reservationCounter = 1;
 
     //constructor reservation
     public Reservation(String reservationId,Customer customer, Flight flight, String confirmationNumber){
@@ -24,7 +25,7 @@ public class Reservation {
     public void setReservationId(String reservationId){
         this.reservationId = reservationId;
     }
-    public Customer getcustomer(){
+    public Customer getCustomer(){
         return customer;
     }
     public void setCustomer(Customer customer){
@@ -49,27 +50,28 @@ public class Reservation {
             return "Your last name or Confirmation Number does not match";
         }
         for (Reservation reservation : reservationList) {
-            if (reservation.getcustomer().getUsername().equals(customer.getUsername()) && reservation.getConfirmationNumber().equals(confirmationNumber)){
+            if (reservation.getCustomer().getUsername().equals(customer.getUsername()) &&
+                    reservation.getConfirmationNumber().equals(confirmationNumber)) {
                 return "This trip is already added to your account";
             }
-            new Reservation(newReservationID(), customer, flight, confirmationNumber);
-            return "Flight was added to your account";
         }
-        return "No matching trip found to delete";
+            new Reservation(generateNewReservationId(), customer, flight, confirmationNumber);
+            return "Flight was added to your account";
     }
-    private static int reservationCounter =1;
-    private static String newReservationID(){
-        return "Reservation" + (reservationCounter++);
-    }
-    //delete a trip from account
-    public static String deleteTrip (Customer customer, String confirmationNumber){
-        for (Reservation reservation: reservationList){
-            if (reservation.getcustomer().getUsername().equals(customer.getUsername()) && reservation.getConfirmationNumber().equals(confirmationNumber)){
-                reservationList.remove(reservation);
+
+    public static String deleteTrip(Customer customer, String confirmationNumber) {
+        for (int i = 0; i < reservationList.size(); i++) {
+            Reservation reservation = reservationList.get(i);
+            if (reservation.getCustomer().getUsername().equals(customer.getUsername()) &&
+                    reservation.getConfirmationNumber().equalsIgnoreCase(confirmationNumber)) {
+                reservationList.remove(i);
                 return "Flight was removed from your account";
             }
         }
         return "Can't find matching reservation";
+    }
+    private static String generateNewReservationId() {
+        return "Reservation" + (reservationCounter++);
     }
 }
 
