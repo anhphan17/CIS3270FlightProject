@@ -111,7 +111,7 @@ public class DBQueries extends Application {
         }
     }
 
-    private void insertCustomer(String firstName, String lastName, String email, TextArea queryResults) {
+     private void insertCustomer(String firstName, String lastName, String email, TextArea queryResults) {
         String insertQuery = "INSERT INTO customer (first_name, last_name, email) VALUES (?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
