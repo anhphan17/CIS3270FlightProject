@@ -10,7 +10,7 @@ public class Reservation {
     private static final ArrayList<Reservation> reservationList = new ArrayList<>();
 
     //constructor reservation
-    public Reservation(String reservationId,Customer customer, Flight flight){
+    public Reservation(String reservationId,Customer customer, Flight flight, String confirmationNumber){
         this.reservationId = reservationId;
         this.customer = customer;
         this.flight = flight;
@@ -49,7 +49,7 @@ public class Reservation {
             return "Your last name or Confirmation Number does not match";
         }
         for (Reservation reservation : reservationList) {
-            if (reservation.getcustomer().getUsername().equals(customer.getUsername()) && reservation.getConfirmationNumber().equals(confirmationNumber)) {
+            if (reservation.getcustomer().getUsername().equals(customer.getUsername()) && reservation.getConfirmationNumber().equals(confirmationNumber)){
                 return "This trip is already added to your account";
             }
             new Reservation(newReservationID(), customer, flight, confirmationNumber);
@@ -62,9 +62,9 @@ public class Reservation {
         return "Reservation" + (reservationCounter++);
     }
     //delete a trip from account
-    public static String deleteTrip (Customer customer, String ConfirmationNumber){
+    public static String deleteTrip (Customer customer, String confirmationNumber){
         for (Reservation reservation: reservationList){
-            if (reservation.getcustomer().getUsername().equals(customer.getUsername())&&reservation.getConfirmationNumber().equals(confirmationNumber)){
+            if (reservation.getcustomer().getUsername().equals(customer.getUsername()) && reservation.getConfirmationNumber().equals(confirmationNumber)){
                 reservationList.remove(reservation);
                 return "Flight was removed from your account";
             }
