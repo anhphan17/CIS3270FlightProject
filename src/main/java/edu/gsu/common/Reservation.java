@@ -66,10 +66,11 @@ public class Reservation {
         for (Reservation reservation: reservationList){
             if (reservation.getcustomer().getUsername().equals(customer.getUsername())&&reservation.getConfirmationNumber().equals(confirmationNumber)){
                 reservationList.remove(reservation);
+                return "Flight was removed from your account";
             }
         }
+        return "Can't find matching reservation";
     }
 }
-/**Be able to book a flight and add that to his account.
- 7.3. Be able to delete a flight from his account.
- 7.4. Customer should not be able to book same flight more than once**/
+
+ //7.4. Customer should not be able to book same flight more than once**/
