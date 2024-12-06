@@ -14,6 +14,8 @@ public class Reservation {
         this.reservationId = reservationId;
         this.customer = customer;
         this.flight = flight;
+        this.confirmationNumber = confirmationNumber;
+        reservationList.add(this);
     }
     //getter and setter
     public String getReservationId(){
@@ -50,9 +52,22 @@ public class Reservation {
             if (reservation.getcustomer().getUsername().equals(customer.getUsername()) && reservation.getConfirmationNumber().equals(confirmationNumber)) {
                 return "This trip is already added to your account";
             }
-
+            new Reservation(newReservationID(), customer, flight, confirmationNumber);
+            return "Flight was added to your account";
         }
         return "No matching trip found to delete";
+    }
+    private static int reservationCounter =1;
+    private static String newReservationID(){
+        return "Reservation" + (reservationCounter++);
+    }
+    //delete a trip from account
+    public static String deleteTrip (Customer customer, String ConfirmationNumber){
+        for (Reservation reservation: reservationList){
+            if (reservation.getcustomer().getUsername().equals(customer.getUsername())&&reservation.getConfirmationNumber().equals(confirmationNumber)){
+                reservationList.remove(reservation);
+            }
+        }
     }
 }
 /**Be able to book a flight and add that to his account.
