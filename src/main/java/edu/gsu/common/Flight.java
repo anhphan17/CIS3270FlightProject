@@ -1,5 +1,7 @@
 package edu.gsu.common;
-
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 public class Flight {
     private String airLine;
     private int flightNumber;
@@ -91,7 +93,8 @@ public class Flight {
                 this.DestinationCity.equalsIgnoreCase(other.DestinationCity);
     }
     public boolean conflictsWith (Flight otherFlight){
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime thisDeparture = LocalDateTime.parse(this.flightDate + " "+this.DepartureTime, formatter);
     }
 }
 
