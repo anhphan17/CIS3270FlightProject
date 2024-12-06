@@ -1,5 +1,7 @@
 package edu.gsu.common;
-
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 public class Flight {
     private String airLine;
     private int flightNumber;
@@ -89,6 +91,14 @@ public class Flight {
     public boolean isSameRoute(Flight other) {
         return this.DepartureCity.equalsIgnoreCase(other.DepartureCity) &&
                 this.DestinationCity.equalsIgnoreCase(other.DestinationCity);
+    }
+    public boolean conflictsWith (Flight other){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime thisDeparture = LocalDateTime.parse(this.flightDate + " "+this.DepartureTime, formatter);
+        LocalDateTime thisArrival = LocalDateTime.parse(this.flightDate + " " + this.ArrivalTime, formatter);
+        LocalDateTime otherDeparture = LocalDateTime.parse(other.flightDate + " " + other.DepartureTime, formatter);
+        LocalDateTime otherArrival = LocalDateTime.parse(other.flightDate + " " + other.ArrivalTime, formatter);
+    return (thisDeparture.isBefore(otherArrival)&& thisArrival.isAfter(otherDeparture));
     }
 }
 
