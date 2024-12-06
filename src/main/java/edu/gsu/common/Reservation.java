@@ -73,6 +73,14 @@ public class Reservation {
     private static String generateNewReservationId() {
         return "Reservation" + (reservationCounter++);
     }
+    //warn customer about conflict date and time
+    public static boolean flightConflict(Customer customer, Flight newFlight){
+        for (Reservation reservation : reservationList){
+            if (reservation.getCustomer().equals(customer) && reservation.getFlight().conflictsWith(newFlight)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
- //7.4. Customer should not be able to book same flight more than once
