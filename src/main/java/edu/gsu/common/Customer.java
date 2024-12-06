@@ -1,6 +1,6 @@
 package edu.gsu.common;
 
-public class Customer {
+public class Customer extends User{
 
     private String firstname;
     private String lastname;
@@ -9,9 +9,6 @@ public class Customer {
     private String zipcode;
     private String state;
 
-    private String username;
-    private String password;
-    private String email;
 
     private String SSN;
     private String securityQuestion;
@@ -31,27 +28,22 @@ public class Customer {
         this.address = address;
         this.zipcode = zipcode;
         this.state = state;
-        this.username = username;
-        this.password = password;
-        this.email = email;
+
         this.SSN = SSN;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
     }
 
+    // FULL NAME
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
-
-    // FULL NAME
     public String getFirstname() {
         return this.firstname;
     }
-
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
-
     public String getLastname() {
         return this.lastname;
     }
