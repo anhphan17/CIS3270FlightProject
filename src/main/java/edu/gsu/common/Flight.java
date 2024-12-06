@@ -90,6 +90,9 @@ public class Flight {
         return this.DepartureCity.equalsIgnoreCase(other.DepartureCity) &&
                 this.DestinationCity.equalsIgnoreCase(other.DestinationCity);
     }
+    public boolean conflictsWith (Flight otherFlight){
+
+    }
 }
 
 

@@ -43,7 +43,7 @@ public class Reservation {
         this.confirmationNumber = confirmationNumber;
     }
 
-    //add a trip to account
+    //add a trip to account, cant book same trip
     public static String addTrip (Customer customer, String confirmationNumber, String lastName, Flight flight){
         if (!customer.getLastname().equalsIgnoreCase(lastName)){
             return "Your last name or Confirmation Number does not match";
@@ -71,6 +71,15 @@ public class Reservation {
         }
         return "Can't find matching reservation";
     }
+    //Warn customer about flight date and time conflicts
+    public static boolean flightConflict (Customer customer, Flight newflight){
+        for (Reservation reservation: reservationList){
+            if (reservation.getcustomer().equals(customer) && reservation.getFlight().conflictsWith(newflight)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
- //7.4. Customer should not be able to book same flight more than once
+
