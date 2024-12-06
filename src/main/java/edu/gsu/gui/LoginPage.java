@@ -9,7 +9,7 @@ public class LoginPage extends Application {
     @Override
     public void start(Stage primaryStage) {
         Button btLogin = new Button("Login");
-        Scene scene  = new Scene(btLogin, 300, 200);
+        Scene scene = new Scene(btLogin, 300, 200);
         primaryStage.setTitle("LoginPage");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -19,5 +19,4 @@ public class LoginPage extends Application {
         Application.launch(args);
 
     }
-
 }
