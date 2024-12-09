@@ -123,7 +123,7 @@ public class RegistrationPage extends Application {
 
         // Set the scene and stage
         Scene scene = new Scene(root);
-        primaryStage.setTitle("Login Page");
+        primaryStage.setTitle("Registration Page");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
