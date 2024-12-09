@@ -72,6 +72,7 @@ public class AdminPanel extends Application {
                 logger.log(Level.SEVERE, "Error navigating back to Main Page", e);
             }
         });
+
         // Add components to the root pane
         root.getChildren().addAll(lblTitle, btnAddFlight, btnUpdateFlight, btnDeleteFlight, btnViewReservations, btnBackToMenu);
 
