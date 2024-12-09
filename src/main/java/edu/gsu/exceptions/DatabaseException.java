@@ -1,4 +1,6 @@
 package edu.gsu.exceptions;
 
-public class DatabaseException {
+public class DatabaseException extends Exception {
+
+
 }
