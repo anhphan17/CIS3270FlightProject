@@ -24,12 +24,31 @@ public class MainPage extends Application {
         btnLogin.setLayoutY(200);
         btnLogin.setPrefSize(200, 25);
 
+        btnLogin.setOnAction(event -> {
+            LoginPage loginPage = new LoginPage();
+            try {
+                loginPage.start(primaryStage);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         Button btnRegister = new Button("Register");
         btnRegister.setFont(Font.font("Serif", 12));
         btnRegister.setLayoutX(200);
         btnRegister.setLayoutY(250);
         btnRegister.setPrefSize(200, 25);
 
+        btnRegister.setOnAction(event -> {
+            RegistrationPage registrationPage = new RegistrationPage();
+            try {
+                registrationPage.start(primaryStage);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         // Create the label for the title
         Label lblTitle = new Label("MIA Flights");

@@ -76,8 +76,15 @@ public class BookingPage extends Application {
         ComboBox<String> cmbFlightOptions = new ComboBox<>();
         cmbFlightOptions.setPromptText("Select a Flight");
         cmbFlightOptions.setLayoutX(200);
-        cmbFlightOptions.setLayoutY(400);
+        cmbFlightOptions.setLayoutY(410);
         cmbFlightOptions.setPrefSize(200,25);
+
+        Button btnBook = new Button("Book");
+        btnBook.setFont(Font.font("Serif", 12));
+        btnBook.setLayoutX(250);
+        btnBook.setLayoutY(450);
+        btnBook.setPrefSize(100,25);
+
 
         btnSearch.setOnAction(event -> {
             String departureCity = txtDepartureCity.getText();
@@ -126,7 +133,7 @@ public class BookingPage extends Application {
 
 
         root.getChildren().addAll(lblTitle, lblSubtitle, txtDepartureCity, txtDestinationCity,
-                btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions);
+                btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions, btnBook);
 
         Scene scene = new Scene(root);
         primaryStage.setTitle("Booking Page");

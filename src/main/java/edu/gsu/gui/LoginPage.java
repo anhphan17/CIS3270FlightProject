@@ -30,14 +30,14 @@ public class LoginPage extends Application {
         // Create the username text field
         TextField txtUsername = new TextField();
         txtUsername.setPromptText("Username");
-        txtUsername.setLayoutX(214);
+        txtUsername.setLayoutX(200);
         txtUsername.setLayoutY(174);
         txtUsername.setPrefSize(200, 25);
 
         // Create the password text field
         TextField txtPassword = new TextField();
         txtPassword.setPromptText("Password");
-        txtPassword.setLayoutX(214);
+        txtPassword.setLayoutX(200);
         txtPassword.setLayoutY(214);
         txtPassword.setPrefSize(200, 25);
 
