@@ -103,11 +103,11 @@ public class BookingPage extends Application {
 
 
             while (resultSet.next()) {
-                String flightInfo = String.format("%s %d (%s - %s)",
+                String flightInfo = String.format("%s %s (%s - %s)",
                         resultSet.getString("airline"),
-                        resultSet.getInt("flightNumber"),
-                        resultSet.getString("DepartureTime"),
-                        resultSet.getString("ArrivalTime"));
+                        resultSet.getString("flight_number"),
+                        resultSet.getString("departure_time"),
+                        resultSet.getString("arrival_time"));
                 results.append(flightInfo).append("\n");
                 cmbFlightOptions.getItems().add(flightInfo);
             }
@@ -126,7 +126,7 @@ public class BookingPage extends Application {
 
 
         root.getChildren().addAll(lblTitle, lblSubtitle, txtDepartureCity, txtDestinationCity,
-                btnSearch, txtFlightDate, txtSearchResults);
+                btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions);
 
         Scene scene = new Scene(root);
         primaryStage.setTitle("Booking Page");
