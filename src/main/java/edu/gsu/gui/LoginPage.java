@@ -32,14 +32,14 @@ public class LoginPage extends Application {
         txtUsername.setPromptText("Username");
         txtUsername.setLayoutX(214);
         txtUsername.setLayoutY(174);
-        txtUsername.setPrefSize(190, 25);
+        txtUsername.setPrefSize(200, 25);
 
         // Create the password text field
         TextField txtPassword = new TextField();
         txtPassword.setPromptText("Password");
         txtPassword.setLayoutX(214);
         txtPassword.setLayoutY(214);
-        txtPassword.setPrefSize(190, 25);
+        txtPassword.setPrefSize(200, 25);
 
         // Create the login button
         Button btnLogin = new Button("Login");
@@ -71,7 +71,7 @@ public class LoginPage extends Application {
         });
 
         // Create the label for the title
-        Label lblTitle = new Label("Mia Airlines");
+        Label lblTitle = new Label("MIA Flights");
         lblTitle.setFont(Font.font("Serif", 50));
         lblTitle.setTextFill(javafx.scene.paint.Color.web("#fffb27"));
         lblTitle.setLayoutX(175);

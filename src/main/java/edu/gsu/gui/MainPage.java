@@ -32,7 +32,7 @@ public class MainPage extends Application {
 
 
         // Create the label for the title
-        Label lblTitle = new Label("Mia Airlines");
+        Label lblTitle = new Label("MIA Flights");
         lblTitle.setFont(Font.font("Serif", 50));
         lblTitle.setTextFill(javafx.scene.paint.Color.web("#fffb27"));
         lblTitle.setLayoutX(175);
