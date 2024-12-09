@@ -9,7 +9,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class LoginPage extends Application {
+
+    private static final String DB_URL = "jdbc:mysql://cis3270flightproject.mysql.database.azure.com:3306/project3270";
+    private static final String DB_USERNAME = "aphan17";
+    private static final String DB_PASSWORD = "Mendes1998!";
 
     @Override
     public void start(Stage primaryStage) {
@@ -45,9 +54,19 @@ public class LoginPage extends Application {
             String password = txtPassword.getText();
 
             if (username.isEmpty() || password.isEmpty()) {
-                System.out.println("Please enter both username and password.");
+                if (username.isEmpty() && password.isEmpty()) {
+                    System.out.println("Please enter your username and password.");
+                } else if (username.isEmpty()) {
+                    System.out.println("Please enter a username.");
+                } else {
+                    System.out.println("Please enter a password.");
+                }
             } else {
-                System.out.println("Login button clicked! Username: " + username + ", Password: " + password);
+                if (checkLoginCredentials(username, password)) {
+                    System.out.println("Login successful! Proceeding to flight booking.");
+                } else {
+                    System.out.println("Incorrect username or password. Please try again.");
+                }
             }
         });
 
@@ -67,6 +86,29 @@ public class LoginPage extends Application {
         primaryStage.setTitle("Login Page");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private boolean checkLoginCredentials(String username, String password) {
+        boolean isValidUser = false;
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
+            String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, username);
+                preparedStatement.setString(2, password);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    isValidUser = true;
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Database connection error.");
+        }
+
+        return isValidUser;
     }
 
     public static void main(String[] args) {
