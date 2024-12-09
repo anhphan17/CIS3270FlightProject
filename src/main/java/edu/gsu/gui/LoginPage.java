@@ -48,6 +48,13 @@ public class LoginPage extends Application {
         btnLogin.setLayoutY(266);
         btnLogin.setPrefSize(81, 25);
 
+        Label lblMessage = new Label();
+        lblMessage.setFont(Font.font("Serif", 12));
+        lblMessage.setLayoutX(200);
+        lblMessage.setLayoutY(140);
+        lblMessage.setPrefSize(300,25);
+        lblMessage.setStyle("-fx-text-fill: red;");
+
         // Add button click handler
         btnLogin.setOnAction(e -> {
             String username = txtUsername.getText();
@@ -55,17 +62,19 @@ public class LoginPage extends Application {
 
             if (username.isEmpty() || password.isEmpty()) {
                 if (username.isEmpty() && password.isEmpty()) {
-                    System.out.println("Please enter your username and password.");
+                    lblMessage.setText("Please enter your username and password.");
                 } else if (username.isEmpty()) {
-                    System.out.println("Please enter a username.");
+                    lblMessage.setText("Please enter a username.");
                 } else {
-                    System.out.println("Please enter a password.");
+                    lblMessage.setText("Please enter a password.");
                 }
             } else {
                 if (checkLoginCredentials(username, password)) {
-                    System.out.println("Login successful! Proceeding to flight booking.");
+                    lblMessage.setStyle("-fx-text-fill: green;");
+                    lblMessage.setText("Login successful! Proceeding to flight booking.");
                 } else {
-                    System.out.println("Incorrect username or password. Please try again.");
+                    lblMessage.setStyle("-fx-text-fill: red;");
+                    lblMessage.setText("Incorrect username or password. Please try again.");
                 }
             }
         });
@@ -79,7 +88,7 @@ public class LoginPage extends Application {
         lblTitle.setPrefSize(411, 113);
 
         // Add all nodes to the root pane
-        root.getChildren().addAll(txtUsername, txtPassword, btnLogin, lblTitle);
+        root.getChildren().addAll(txtUsername, txtPassword, btnLogin, lblTitle, lblMessage);
 
         // Set the scene and stage
         Scene scene = new Scene(root);
