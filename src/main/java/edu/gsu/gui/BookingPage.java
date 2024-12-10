@@ -128,6 +128,11 @@ public class BookingPage extends Application {
                             return;
                         }
 
+                        if (isFlightFull(flightId)) {
+                            txtSearchResults.setText("This flight is fully booked. You cannot add this flight to your bookings.");
+                            return;
+                        }
+
                         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
                             String getFlightTimesQuery = "SELECT departure_time, arrival_time FROM flights WHERE id = ?";
                             String newDepartureTime = null;
@@ -265,5 +270,30 @@ public class BookingPage extends Application {
             System.out.println("Database connection error.");
         }
         return conflictExists;
+    }
+    private boolean isFlightFull(int flightId) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
+            String countQuery = "SELECT COUNT(*) AS booked_count FROM reservations WHERE flight_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(countQuery);
+            preparedStatement.setInt(1, flightId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int bookedCount = resultSet.getInt("booked_count");
+
+                String seatsQuery = "SELECT total_seats FROM flights WHERE id = ?";
+                PreparedStatement seatsStatement = connection.prepareStatement(seatsQuery);
+                seatsStatement.setInt(1, flightId);
+
+                ResultSet seatsResultSet = seatsStatement.executeQuery();
+                if (seatsResultSet.next()) {
+                    int totalSeats = seatsResultSet.getInt("total_seats");
+                    return bookedCount >= totalSeats; // True if flight is full
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
