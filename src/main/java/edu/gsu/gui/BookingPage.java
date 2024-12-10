@@ -46,61 +46,104 @@ public class BookingPage extends Application {
         txtDepartureCity.setPromptText("Departure City");
         txtDepartureCity.setLayoutX(200);
         txtDepartureCity.setLayoutY(150);
-        txtDepartureCity.setPrefSize(200,25);
+        txtDepartureCity.setPrefSize(200, 25);
 
         TextField txtDestinationCity = new TextField();
         txtDestinationCity.setPromptText("Destination City");
         txtDestinationCity.setLayoutX(200);
         txtDestinationCity.setLayoutY(185);
-        txtDestinationCity.setPrefSize(200,25);
+        txtDestinationCity.setPrefSize(200, 25);
 
         TextField txtFlightDate = new TextField();
         txtFlightDate.setPromptText("Flight Date (YYYY-MM-DD)");
         txtFlightDate.setLayoutX(200);
         txtFlightDate.setLayoutY(220);
-        txtFlightDate.setPrefSize(200,25);
+        txtFlightDate.setPrefSize(200, 25);
 
         Button btnSearch = new Button("Search");
         btnSearch.setFont(Font.font("Serif", 12));
         btnSearch.setLayoutX(250);
         btnSearch.setLayoutY(255);
-        btnSearch.setPrefSize(100,25);
+        btnSearch.setPrefSize(100, 25);
 
         TextArea txtSearchResults = new TextArea();
         txtSearchResults.setText("Search Results");
         txtSearchResults.setLayoutX(100);
         txtSearchResults.setLayoutY(290);
-        txtSearchResults.setPrefSize(400,100);
+        txtSearchResults.setPrefSize(400, 100);
         txtSearchResults.setEditable(false);
 
         ComboBox<String> cmbFlightOptions = new ComboBox<>();
         cmbFlightOptions.setPromptText("Select a Flight");
         cmbFlightOptions.setLayoutX(200);
         cmbFlightOptions.setLayoutY(400);
-        cmbFlightOptions.setPrefSize(200,25);
+        cmbFlightOptions.setPrefSize(200, 25);
 
         TextField txtUserId = new TextField();
         txtUserId.setPromptText("Enter UserId");
         txtUserId.setLayoutX(225);
         txtUserId.setLayoutY(435);
-        txtFlightDate.setPrefSize(200,25);
+        txtFlightDate.setPrefSize(200, 25);
 
         Button btnBook = new Button("Book");
         btnBook.setFont(Font.font("Serif", 12));
         btnBook.setLayoutX(250);
         btnBook.setLayoutY(470);
-        btnBook.setPrefSize(100,25);
+        btnBook.setPrefSize(100, 25);
 
         btnBook.setOnAction(e -> {
             String selectedFlight = cmbFlightOptions.getValue();
+            String userIdInput = txtUserId.getText();
 
             if (selectedFlight == null || selectedFlight.isEmpty()) {
                 txtSearchResults.setText("Please select a flight to book.");
                 return;
             }
 
-        });
+            try {
+                int userId = Integer.parseInt(userIdInput);
 
+                String flightNumber = selectedFlight.split(" ")[1];
+                int flightId = getFlightIdByFlightNumber(flightNumber);
+
+                if (flightId == -1) {
+                    txtSearchResults.setText("Selected flight does not exist.");
+                    return;
+                }
+
+                // Check if the user has already booked this flight
+                try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
+                    String checkQuery = "SELECT * FROM reservations WHERE user_id = ? AND flight_id = ?";
+                    try (PreparedStatement checkStatement = connection.prepareStatement(checkQuery)) {
+                        checkStatement.setInt(1, userId);
+                        checkStatement.setInt(2, flightId);
+
+                        try (ResultSet resultSet = checkStatement.executeQuery()) {
+                            if (resultSet.next()) {
+                                txtSearchResults.setText("You have already booked this flight.");
+                                return;
+                            }
+                        }
+                    }
+
+                    // Insert the reservation
+                    String insertQuery = "INSERT INTO reservations (user_id, flight_id, flight_number) VALUES (?, ?, ?)";
+                    try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+                        insertStatement.setInt(1, userId);
+                        insertStatement.setInt(2, flightId);
+                        insertStatement.setString(3, flightNumber);
+
+                        insertStatement.executeUpdate();
+                        txtSearchResults.setText("Flight booked successfully!");
+                    }
+                }
+            } catch (NumberFormatException ex) {
+                txtSearchResults.setText("Invalid User ID. Please enter a valid number.");
+            } catch (Exception ex) {
+                txtSearchResults.setText("Error booking flight: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        });
 
         btnSearch.setOnAction(event -> {
             String departureCity = txtDepartureCity.getText();
@@ -124,29 +167,26 @@ public class BookingPage extends Application {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 cmbFlightOptions.getItems().clear();
 
+                while (resultSet.next()) {
+                    String flightInfo = String.format("%s %s (%s - %s)",
+                            resultSet.getString("airline"),
+                            resultSet.getString("flight_number"),
+                            resultSet.getString("departure_time"),
+                            resultSet.getString("arrival_time"));
+                    results.append(flightInfo).append("\n");
+                    cmbFlightOptions.getItems().add(flightInfo);
+                }
 
-            while (resultSet.next()) {
-                String flightInfo = String.format("%s %s (%s - %s)",
-                        resultSet.getString("airline"),
-                        resultSet.getString("flight_number"),
-                        resultSet.getString("departure_time"),
-                        resultSet.getString("arrival_time"));
-                results.append(flightInfo).append("\n");
-                cmbFlightOptions.getItems().add(flightInfo);
-            }
-
-            if (results.length() == 0) {
-                txtSearchResults.setText("No flights found matching your criteria.");
-            } else {
-                txtSearchResults.setText(results.toString());
-            }
-        }
-        catch (Exception e) {
+                if (results.isEmpty()) {
+                    txtSearchResults.setText("No flights found matching your criteria.");
+                } else {
+                    txtSearchResults.setText(results.toString());
+                }
+            } catch (Exception e) {
                 txtSearchResults.setText("Error connecting to the database: " + e.getMessage());
                 e.printStackTrace();
-        }
+            }
         });
-
 
         root.getChildren().addAll(lblTitle, lblSubtitle, txtDepartureCity, txtDestinationCity,
                 btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions, txtUserId, btnBook);
@@ -155,6 +195,23 @@ public class BookingPage extends Application {
         primaryStage.setTitle("Booking Page");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
 
+    // Helper method to fetch the flight_id by flight_number
+    private int getFlightIdByFlightNumber(String flightNumber) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
+            String query = "SELECT id FROM flights WHERE flight_number = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, flightNumber);
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    return resultSet.getInt("id");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;  // Return -1 if flight is not found
     }
 }
