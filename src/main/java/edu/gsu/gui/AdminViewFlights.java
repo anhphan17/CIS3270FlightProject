@@ -62,18 +62,18 @@ public class AdminViewFlights extends Application {
         });
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
-            String query = "SELECT flight_number, departure_city, destination_city, departure_time, arrival_time " +
-                    "FROM flights";
+            String query = "SELECT r.reservation_id, r.user_id, r.flight_id, r.booking_time, r.flight_number " +
+                    "FROM reservations r " + "JOIN flights f on r.flight_id = f.id";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             StringBuilder flightDetails = new StringBuilder();
             while (resultSet.next()) {
-                flightDetails.append("Flight Number: ").append(resultSet.getString("flight_number"))
-                        .append("\n").append("From: ").append(resultSet.getString("departure_city"))
-                        .append("\n").append("To: ").append(resultSet.getString("destination_city"))
-                        .append("\n").append("Departure: ").append(resultSet.getString("departure_time"))
-                        .append("\n").append("Arrival: ").append(resultSet.getString("arrival_time"))
+                flightDetails.append("Reservation Id: ").append(resultSet.getString("reservation_id"))
+                        .append("\n").append("User Id: ").append(resultSet.getString("user_id"))
+                        .append("\n").append("Flight Id: ").append(resultSet.getString("flight_id"))
+                        .append("\n").append("Booking Time: ").append(resultSet.getString("booking_time"))
+                        .append("\n").append("Flight Number: ").append(resultSet.getString("flight_number"))
                         .append("\n\n");
                 }
             if (flightDetails.length() > 0) {
