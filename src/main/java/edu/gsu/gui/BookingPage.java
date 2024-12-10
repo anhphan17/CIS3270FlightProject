@@ -266,15 +266,17 @@ public class BookingPage extends Application {
         try (Connection connection = DriverManager.getConnection(DB_URL,DB_USERNAME,DB_PASSWORD)) {
             String query = "SELECT * FROM reservations r " +
                     "JOIN flights f ON r.flight_id = f.id " + "WHERE r.user_id = ? " +
+                    "AND DATE(f.departure_time) = DATE(?) " +
                     "AND ((f.departure_time < ? AND f.arrival_time > ?) " +
                     "OR (f.departure_time < ? AND f.arrival_time > ?))";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setInt(1, userId);
-                preparedStatement.setString(2, newArrivalTime);
-                preparedStatement.setString(3, newDepartureTime);
+                preparedStatement.setString(2, newDepartureTime);
+                preparedStatement.setString(3, newArrivalTime);
                 preparedStatement.setString(4, newDepartureTime);
                 preparedStatement.setString(5, newArrivalTime);
+                preparedStatement.setString(6, newArrivalTime);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
