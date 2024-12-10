@@ -85,6 +85,23 @@ public class BookingPage extends Application {
         txtUserId.setLayoutY(435);
         txtFlightDate.setPrefSize(200, 25);
 
+        Button btnBackToMain = new Button("Back To Main");
+        btnBackToMain.setFont(Font.font("Serif", 12));
+        btnBackToMain.setLayoutX(25);
+        btnBackToMain.setLayoutY(550);
+        btnBackToMain.setPrefSize(100, 25);
+
+        btnBackToMain.setOnAction(e -> {
+            try {
+                primaryStage.close();
+                Stage mainPageStage = new Stage();
+                new MainPage().start(mainPageStage);
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
         Button btnBook = new Button("Book");
         btnBook.setFont(Font.font("Serif", 12));
         btnBook.setLayoutX(250);
@@ -189,7 +206,7 @@ public class BookingPage extends Application {
         });
 
         root.getChildren().addAll(lblTitle, lblSubtitle, txtDepartureCity, txtDestinationCity,
-                btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions, txtUserId, btnBook);
+                btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions, txtUserId, btnBook, btnBackToMain);
 
         Scene scene = new Scene(root);
         primaryStage.setTitle("Booking Page");
