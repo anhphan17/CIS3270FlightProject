@@ -22,15 +22,23 @@ public class Trips extends Application{
     private static final String DB_PASSWORD = "Mendes1998!";
     private int userId;
 
-    /*public Trips() {
+    public Trips() {
         this.userId = -1; // Default no value
-    }*/
+    }
 
     public Trips(int userId) {
         this.userId = userId;
     }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public static void main(String[] args) {
+            Trips trips = new Trips();
+            trips.setUserId(123);
         launch(args);}
+
     @Override
     public void start(Stage primaryStage) {
         AnchorPane root = new AnchorPane();
@@ -67,8 +75,14 @@ public class Trips extends Application{
             }
 
             // Cancel (remove from database and update ListView)
-            lstBookedFlights.getItems().remove(selectedFlight);
-            showAlert("Success", "Booking cancelled successfully.");
+            String flightNumber = selectedFlight.split("\\|")[0].trim().replace("Flight: ", "");
+            if (deleteBookingFromDatabase(flightNumber)) {
+                // Remove from ListView if successfully deleted from the database
+                lstBookedFlights.getItems().remove(selectedFlight);
+                showAlert("Success", "Booking cancelled successfully.");
+            } else {
+                showAlert("Error", "Failed to cancel the booking. Please try again.");
+            }
         });
 
         Button btnChangeBooking = new Button("Change Booking");
@@ -162,6 +176,21 @@ public class Trips extends Application{
         } catch (Exception e) {
             lstBookedFlights.getItems().add("Error loading trips. Please try again later.");
             e.printStackTrace();
+        }
+    }
+    private boolean deleteBookingFromDatabase(String flightNumber) {
+        String deleteQuery = "DELETE FROM reservations " +
+                "WHERE flight_id = (SELECT id FROM flights WHERE flight_number = ?) AND user_id = ?";
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
+            preparedStatement.setString(1, flightNumber);
+            preparedStatement.setInt(2, userId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0; // Returns true if at least one row was affected
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
