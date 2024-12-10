@@ -67,6 +67,16 @@ public class AdminPanel extends Application {
         btnUpdateFlight.setOnAction(event -> {
         });
 
+        // Navigate to Delete Flight Page
+        btnDeleteFlight.setOnAction(event -> {
+            try {
+                primaryStage.close();
+                new AdminDeleteFlight().start(new Stage());
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Error navigating to Delete Flight Page", e);
+            }
+        });
+
         // Navigate to View Reservations Page
         btnViewReservations.setOnAction(event -> {
         });
