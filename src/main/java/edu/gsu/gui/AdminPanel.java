@@ -46,6 +46,23 @@ public class AdminPanel extends Application {
         btnViewReservations.setLayoutY(250);
         btnViewReservations.setPrefSize(200, 25);
 
+        Button btnAdminLogout = new Button("Log Out");
+        btnAdminLogout.setFont(Font.font("Serif", 12));
+        btnAdminLogout.setLayoutX(25);
+        btnAdminLogout.setLayoutY(350);
+        btnAdminLogout.setPrefSize(100, 25);
+
+        btnAdminLogout.setOnAction(e -> {
+            try {
+                primaryStage.close();
+                Stage adminLogOut = new Stage();
+                new AdminLoginPage().start(primaryStage);
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
         Button btnBackToMenu = new Button("Back to Main Menu");
         btnBackToMenu.setLayoutX(200);
         btnBackToMenu.setLayoutY(300);
@@ -97,7 +114,8 @@ public class AdminPanel extends Application {
         });
 
         // Add components to the root pane
-        root.getChildren().addAll(lblTitle, btnAddFlight, btnUpdateFlight, btnDeleteFlight, btnViewReservations, btnBackToMenu);
+        root.getChildren().addAll(lblTitle, btnAddFlight, btnUpdateFlight, btnDeleteFlight, btnViewReservations,
+                btnBackToMenu, btnAdminLogout);
 
         // Set up the scene and stage
         Scene scene = new Scene(root);
