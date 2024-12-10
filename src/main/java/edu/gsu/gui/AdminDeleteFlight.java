@@ -16,6 +16,7 @@ public class AdminDeleteFlight extends Application {
     private static final String DB_URL = "jdbc:mysql://cis3270flightproject.mysql.database.azure.com:3306/project3270";
     private static final String DB_USERNAME = "aphan17";
     private static final String DB_PASSWORD = "Mendes1998!";
+
     @Override
     public void start(Stage primaryStage) {
         AnchorPane root = new AnchorPane();
