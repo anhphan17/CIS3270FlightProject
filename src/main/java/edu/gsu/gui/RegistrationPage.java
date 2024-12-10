@@ -116,10 +116,27 @@ public class RegistrationPage extends Application {
         lblTitle.setLayoutY(5);
         lblTitle.setPrefSize(411, 113);
 
+        Button btnBack = new Button("Back");
+        btnBack.setFont(Font.font("Serif", 12));
+        btnBack.setLayoutX(25);
+        btnBack.setLayoutY(350);
+        btnBack.setPrefSize(81, 25);
+
+        btnBack.setOnAction(e -> {
+            try {
+                primaryStage.close();
+                Stage mainPageStage = new Stage();
+                new MainPage().start(mainPageStage);
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
         // Add all nodes to the root pane
         root.getChildren().addAll(txtFirstName, txtLastName, txtAddress, txtZipcode,
                 txtState, txtUsername, txtPassword, txtEmail, txtSSN,
-                cmbSecurityQuestion, txtSecurityAnswer, btnRegister, lblTitle);
+                cmbSecurityQuestion, txtSecurityAnswer, btnRegister, lblTitle, btnBack);
 
         // Set the scene and stage
         Scene scene = new Scene(root);

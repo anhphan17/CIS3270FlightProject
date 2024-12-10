@@ -1,6 +1,8 @@
 package edu.gsu.common;
 
+
 public class Customer extends User{
+
 
     private String firstname;
     private String lastname;

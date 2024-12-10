@@ -55,6 +55,23 @@ public class LoginPage extends Application {
         lblMessage.setPrefSize(300,25);
         lblMessage.setStyle("-fx-text-fill: red;");
 
+        Button btnBack = new Button("Back");
+        btnBack.setFont(Font.font("Serif", 12));
+        btnBack.setLayoutX(25);
+        btnBack.setLayoutY(350);
+        btnBack.setPrefSize(81, 25);
+
+        btnBack.setOnAction(e -> {
+            try {
+                primaryStage.close();
+                Stage mainPageStage = new Stage();
+                new MainPage().start(mainPageStage);
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
         // Add button click handler
         btnLogin.setOnAction(e -> {
             String username = txtUsername.getText();
@@ -88,7 +105,7 @@ public class LoginPage extends Application {
         lblTitle.setPrefSize(411, 113);
 
         // Add all nodes to the root pane
-        root.getChildren().addAll(txtUsername, txtPassword, btnLogin, lblTitle, lblMessage);
+        root.getChildren().addAll(txtUsername, txtPassword, btnLogin, lblTitle, lblMessage, btnBack);
 
         // Set the scene and stage
         Scene scene = new Scene(root);
