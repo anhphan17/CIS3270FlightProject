@@ -89,6 +89,9 @@ public class LoginPage extends Application {
                 if (checkLoginCredentials(username, password)) {
                     lblMessage.setStyle("-fx-text-fill: green;");
                     lblMessage.setText("Login successful! Proceeding to flight booking.");
+                    primaryStage.close();
+                    Stage bookFlightStage = new Stage();
+                    new BookingPage().start(bookFlightStage);
                 } else {
                     lblMessage.setStyle("-fx-text-fill: red;");
                     lblMessage.setText("Incorrect username or password. Please try again.");
@@ -133,7 +136,6 @@ public class LoginPage extends Application {
             e.printStackTrace();
             System.out.println("Database connection error.");
         }
-
         return isValidUser;
     }
 

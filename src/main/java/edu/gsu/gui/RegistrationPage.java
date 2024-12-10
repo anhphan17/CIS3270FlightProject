@@ -164,8 +164,8 @@ public class RegistrationPage extends Application {
 
             try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
                 String query = "INSERT INTO users (first_name, last_name, address, zip_code, state, username, " +
-                        "password, email, ssn, security_question, security_answer)" +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        "password, email, ssn, security_question, security_answer, role)" +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Customer')";
                 try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                     preparedStatement.setString(1, firstName);
                     preparedStatement.setString(2, lastName);
