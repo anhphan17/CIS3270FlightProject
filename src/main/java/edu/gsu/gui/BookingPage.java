@@ -18,6 +18,12 @@ public class BookingPage extends Application {
     private static final String DB_USERNAME = "aphan17";
     private static final String DB_PASSWORD = "Mendes1998!";
 
+    /*private int userId;
+
+    public BookingPage(int userId) {
+        this.userId = userId;
+    }*/
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -98,6 +104,22 @@ public class BookingPage extends Application {
                 new MainPage().start(mainPageStage);
             }
             catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        Button btnViewTrips = new Button("View Trips");
+        btnViewTrips.setFont(Font.font("Serif", 12));
+        btnViewTrips.setLayoutX(250);
+        btnViewTrips.setLayoutY(510);
+        btnViewTrips.setPrefSize(100, 25);
+
+        btnViewTrips.setOnAction(e -> {
+            try {
+                primaryStage.close();
+                Stage tripsStage = new Stage();
+                new Trips().start(tripsStage); // Ensure userId is passed
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
@@ -216,7 +238,7 @@ public class BookingPage extends Application {
         });
 
         root.getChildren().addAll(lblTitle, lblSubtitle, txtDepartureCity, txtDestinationCity,
-                btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions, txtUserId, btnBook, btnBackToMain);
+                btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions, txtUserId, btnBook, btnBackToMain, btnViewTrips);
 
         Scene scene = new Scene(root);
         primaryStage.setTitle("Booking Page");

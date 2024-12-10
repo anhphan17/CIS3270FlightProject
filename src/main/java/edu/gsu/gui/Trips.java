@@ -13,12 +13,12 @@ public class Trips extends Application{
     private static final String DB_PASSWORD = "Mendes1998!";
     private int userId;
 
-    public Trips() {
+    /*public Trips() {
         this.userId = -1; // Default no value
     }
     public Trips(int userId) {
         this.userId = userId;
-    }
+    }*/
     public static void main(String[] args) {
         launch(args);}
     @Override
@@ -92,7 +92,6 @@ public class Trips extends Application{
                 ex.printStackTrace();
             }
         });
-
 
         // Log Out Button
         Button btnLogout = new Button("Log Out");
