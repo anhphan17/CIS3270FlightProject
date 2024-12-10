@@ -6,6 +6,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -121,6 +125,8 @@ public class Trips extends Application{
         primaryStage.setTitle("Customer - View and Manage Booked Trips");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        loadBookedFlights(lstBookedFlights);
     }
     private  void loadUserTrips(ListView<String> lstBookedFlights) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
@@ -146,6 +152,35 @@ public class Trips extends Application{
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    private void loadBookedFlights(ListView<String> lstBookedFlights) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
+            String query = "SELECT f.flight_number, f.departure_city, f.destination_city, f.departure_time, f.arrival_time " +
+                    "FROM reservations r " +
+                    "JOIN flights f ON r.flight_id = f.id " +
+                    "WHERE r.user_id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, userId); // Use the userId for the query
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    String flightDetails = String.format("Flight: %s | From: %s | To: %s | Departure: %s | Arrival: %s",
+                            resultSet.getString("flight_number"),
+                            resultSet.getString("departure_city"),
+                            resultSet.getString("destination_city"),
+                            resultSet.getString("departure_time"),
+                            resultSet.getString("arrival_time"));
+                    lstBookedFlights.getItems().add(flightDetails);
+                }
+
+                if (lstBookedFlights.getItems().isEmpty()) {
+                    lstBookedFlights.getItems().add("No trips booked yet.");
+                }
+            }
+        } catch (Exception e) {
+            lstBookedFlights.getItems().add("Error loading trips. Please try again later.");
+            e.printStackTrace();
+        }
     }
 }
 
