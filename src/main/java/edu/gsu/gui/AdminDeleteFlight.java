@@ -20,7 +20,7 @@ public class AdminDeleteFlight extends Application {
     @Override
     public void start(Stage primaryStage) {
         AnchorPane root = new AnchorPane();
-        root.setPrefSize(600, 600);
+        root.setPrefSize(600, 400);
         root.setStyle("-fx-background-color: #89CFF0;");
         // Title and Header
         Label lblTitle = new Label("MIA Flights");
@@ -59,25 +59,39 @@ public class AdminDeleteFlight extends Application {
 
         // Delete button
         Button btnDelete = new Button("Delete Flight");
-        btnDelete.setLayoutX(250);
+        btnDelete.setFont(Font.font("Serif", 12));
+        btnDelete.setLayoutX(200);
         btnDelete.setLayoutY(150);
+        btnDelete.setPrefSize(200, 25);
+
         btnDelete.setOnAction(e -> {
             String selectedFlight = cmbFlights.getValue();
             if (selectedFlight == null) {
                 showAlert("Error", "Please select a flight to delete.");
                 return;
             }
-            String flightNumber = selectedFlight.split(" ")[0]; // Extract flight number
+            String flightNumber = selectedFlight.split(" ")[0].trim(); // Extract flight number
             try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
-                String deleteQuery = "DELETE FROM flights WHERE flight_number = ?";
-                PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery);
-                preparedStatement.setString(1, flightNumber);
+                connection.setAutoCommit(false);
 
-                int rowsAffected = preparedStatement.executeUpdate();
+                String deleteReservationQuery = "DELETE FROM reservations WHERE flight_number =?";
+                try (PreparedStatement deleteReservationsStmt = connection.prepareStatement(deleteReservationQuery)) {
+                    deleteReservationsStmt.setString(1, flightNumber);
+                    int reservationsDeleted = deleteReservationsStmt.executeUpdate();
+                    System.out.println(reservationsDeleted + "reservations deleted for flight: " + flightNumber);
+                }
+
+                String deleteFlightQuery = "DELETE FROM flights WHERE flight_number = ?";
+                PreparedStatement deleteFlightStmt = connection.prepareStatement(deleteFlightQuery);
+                deleteFlightStmt.setString(1, flightNumber);
+                int rowsAffected = deleteFlightStmt.executeUpdate();
+
                 if (rowsAffected > 0) {
-                    showAlert("Success", "Flight deleted successfully.");
+                    connection.commit();
+                    showAlert("Success!", "Flight and associated reservations deleted successfully.");
                     cmbFlights.getItems().remove(selectedFlight);
                 } else {
+                    connection.rollback();
                     showAlert("Error", "Failed to delete the flight.");
                 }
             } catch (Exception ex) {
@@ -88,8 +102,10 @@ public class AdminDeleteFlight extends Application {
 
         // Back button
         Button btnBack = new Button("Back to Admin Panel");
-        btnBack.setLayoutX(250);
+        btnBack.setFont(Font.font("Serif", 12));
+        btnBack.setLayoutX(200);
         btnBack.setLayoutY(200);
+        btnBack.setPrefSize(200, 25);
         btnBack.setOnAction(e -> {
             try {
                 primaryStage.close();
