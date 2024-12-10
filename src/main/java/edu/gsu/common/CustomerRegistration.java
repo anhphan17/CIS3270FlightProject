@@ -1,7 +1,7 @@
 package edu.gsu.common;
 
 import java.util.Scanner;
-public class CustomerRegistration {
+public class CustomerRegistration extends Customer {
     public static void main(String[] args){
         Customer customer = new Customer();
 
