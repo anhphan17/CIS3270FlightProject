@@ -112,13 +112,13 @@ public class RegistrationPage extends Application {
         lblTitle.setLayoutY(5);
         lblTitle.setPrefSize(400, 100);
 
-        Button btnBack = new Button("Back");
-        btnBack.setFont(Font.font("Serif", 12));
-        btnBack.setLayoutX(25);
-        btnBack.setLayoutY(350);
-        btnBack.setPrefSize(81, 25);
+        Button btnBackToMain = new Button("Back To Main");
+        btnBackToMain.setFont(Font.font("Serif", 12));
+        btnBackToMain.setLayoutX(25);
+        btnBackToMain.setLayoutY(350);
+        btnBackToMain.setPrefSize(100, 25);
 
-        btnBack.setOnAction(e -> {
+        btnBackToMain.setOnAction(e -> {
             try {
                 primaryStage.close();
                 Stage mainPageStage = new Stage();
@@ -196,7 +196,7 @@ public class RegistrationPage extends Application {
         // Add all nodes to the root pane
         root.getChildren().addAll(txtFirstName, txtLastName, txtAddress, txtZipcode,
                 txtState, txtUsername, txtPassword, txtEmail, txtSSN,
-                cmbSecurityQuestion, txtSecurityAnswer, btnRegister, lblTitle, btnBack, lblMessage);
+                cmbSecurityQuestion, txtSecurityAnswer, btnRegister, lblTitle, btnBackToMain, lblMessage);
 
         // Set the scene and stage
         Scene scene = new Scene(root);

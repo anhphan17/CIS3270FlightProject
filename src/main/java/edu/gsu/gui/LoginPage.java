@@ -55,13 +55,29 @@ public class LoginPage extends Application {
         lblMessage.setPrefSize(300,25);
         lblMessage.setStyle("-fx-text-fill: red;");
 
-        Button btnBack = new Button("Back");
-        btnBack.setFont(Font.font("Serif", 12));
-        btnBack.setLayoutX(25);
-        btnBack.setLayoutY(350);
-        btnBack.setPrefSize(81, 25);
+        Button btnRegister = new Button("Register");
+        btnRegister.setFont(Font.font("Serif", 12));
+        btnRegister.setLayoutX(450);
+        btnRegister.setLayoutY(350);
+        btnRegister.setPrefSize(80, 25);
 
-        btnBack.setOnAction(e -> {
+        btnRegister.setOnAction(event -> {
+            RegistrationPage registrationPage = new RegistrationPage();
+            try {
+                registrationPage.start(primaryStage);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        Button btnBackToMain = new Button("Back To Main");
+        btnBackToMain.setFont(Font.font("Serif", 12));
+        btnBackToMain.setLayoutX(25);
+        btnBackToMain.setLayoutY(350);
+        btnBackToMain.setPrefSize(100, 25);
+
+        btnBackToMain.setOnAction(e -> {
             try {
                 primaryStage.close();
                 Stage mainPageStage = new Stage();
@@ -86,15 +102,22 @@ public class LoginPage extends Application {
                     lblMessage.setText("Please enter a password.");
                 }
             } else {
-                if (checkLoginCredentials(username, password)) {
-                    lblMessage.setStyle("-fx-text-fill: green;");
-                    lblMessage.setText("Login successful! Proceeding to flight booking.");
-                    primaryStage.close();
-                    Stage bookFlightStage = new Stage();
-                    new BookingPage().start(bookFlightStage);
-                } else {
+                String usernameCheckMessage = checkUsernameExists(username);
+                if (usernameCheckMessage != null) {
                     lblMessage.setStyle("-fx-text-fill: red;");
-                    lblMessage.setText("Incorrect username or password. Please try again.");
+                    lblMessage.setText(usernameCheckMessage);
+                }
+                else {
+                    if (checkLoginCredentials(username, password)) {
+                        lblMessage.setStyle("-fx-text-fill: green;");
+                        lblMessage.setText("Login successful! Proceeding to flight booking.");
+                        primaryStage.close();
+                        Stage bookFlightStage = new Stage();
+                        new BookingPage().start(bookFlightStage);
+                    } else {
+                        lblMessage.setStyle("-fx-text-fill: red;");
+                        lblMessage.setText("Incorrect username or password. Please try again.");
+                    }
                 }
             }
         });
@@ -108,13 +131,31 @@ public class LoginPage extends Application {
         lblTitle.setPrefSize(411, 113);
 
         // Add all nodes to the root pane
-        root.getChildren().addAll(txtUsername, txtPassword, btnLogin, lblTitle, lblMessage, btnBack);
+        root.getChildren().addAll(txtUsername, txtPassword, btnLogin, lblTitle, lblMessage, btnBackToMain, btnRegister);
 
         // Set the scene and stage
         Scene scene = new Scene(root);
         primaryStage.setTitle("Login Page");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private String checkUsernameExists(String username) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
+            String query = "SELECT * FROM users WHERE username = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, username);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (!resultSet.next()) {
+                    return "Username does not exist. Please register an account.";
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Database connection error.");
+        }
+        return null;
     }
 
     private boolean checkLoginCredentials(String username, String password) {
