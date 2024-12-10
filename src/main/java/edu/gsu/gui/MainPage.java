@@ -50,6 +50,22 @@ public class MainPage extends Application {
             }
         });
 
+        Button btnAdminLogin = new Button("Admin Login");
+        btnAdminLogin.setFont(Font.font("Serif", 12));
+        btnAdminLogin.setLayoutX(200);
+        btnAdminLogin.setLayoutY(300);
+        btnAdminLogin.setPrefSize(200, 25);
+
+        btnAdminLogin.setOnAction(event -> {
+            AdminLoginPage adminLoginPage = new AdminLoginPage();
+            try {
+                adminLoginPage.start(primaryStage);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         // Create the label for the title
         Label lblTitle = new Label("MIA Flights");
         lblTitle.setFont(Font.font("Serif", 50));
@@ -59,7 +75,7 @@ public class MainPage extends Application {
         lblTitle.setPrefSize(411, 113);
 
         // Add all nodes to the root pane
-        root.getChildren().addAll( btnLogin, btnRegister, lblTitle);
+        root.getChildren().addAll( btnLogin, btnRegister, lblTitle, btnAdminLogin);
 
         // Set the scene and stage
         Scene scene = new Scene(root);

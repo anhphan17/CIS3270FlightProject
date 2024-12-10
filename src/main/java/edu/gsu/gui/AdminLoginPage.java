@@ -14,15 +14,17 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class LoginPage extends Application {
-
+public class AdminLoginPage extends Application {
     private static final String DB_URL = "jdbc:mysql://cis3270flightproject.mysql.database.azure.com:3306/project3270";
     private static final String DB_USERNAME = "aphan17";
     private static final String DB_PASSWORD = "Mendes1998!";
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) {
-
         AnchorPane root = new AnchorPane();
         root.setPrefSize(600, 400);
         root.setStyle("-fx-background-color: #89CFF0;");
@@ -39,54 +41,19 @@ public class LoginPage extends Application {
         txtPassword.setLayoutY(214);
         txtPassword.setPrefSize(200, 25);
 
+        Label lblMessage = new Label();
+        lblMessage.setFont(Font.font("Serif", 12));
+        lblMessage.setLayoutX(150);
+        lblMessage.setLayoutY(140);
+        lblMessage.setPrefSize(400,25);
+        lblMessage.setStyle("-fx-text-fill: red;");
+
         Button btnLogin = new Button("Login");
         btnLogin.setFont(Font.font("Serif", 12));
         btnLogin.setLayoutX(195);
         btnLogin.setLayoutY(260);
         btnLogin.setPrefSize(100, 25);
 
-        Label lblMessage = new Label();
-        lblMessage.setFont(Font.font("Serif", 12));
-        lblMessage.setLayoutX(200);
-        lblMessage.setLayoutY(140);
-        lblMessage.setPrefSize(300,25);
-        lblMessage.setStyle("-fx-text-fill: red;");
-
-        Button btnRegister = new Button("Register");
-        btnRegister.setFont(Font.font("Serif", 12));
-        btnRegister.setLayoutX(450);
-        btnRegister.setLayoutY(350);
-        btnRegister.setPrefSize(80, 25);
-
-        btnRegister.setOnAction(event -> {
-            RegistrationPage registrationPage = new RegistrationPage();
-            try {
-                registrationPage.start(primaryStage);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-
-        Button btnBackToMain = new Button("Back To Main");
-        btnBackToMain.setFont(Font.font("Serif", 12));
-        btnBackToMain.setLayoutX(25);
-        btnBackToMain.setLayoutY(350);
-        btnBackToMain.setPrefSize(100, 25);
-
-        btnBackToMain.setOnAction(e -> {
-            try {
-                primaryStage.close();
-                Stage mainPageStage = new Stage();
-                new MainPage().start(mainPageStage);
-            }
-            catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-
-        // Add button click handler
         btnLogin.setOnAction(e -> {
             String username = txtUsername.getText();
             String password = txtPassword.getText();
@@ -106,17 +73,34 @@ public class LoginPage extends Application {
                     lblMessage.setText(usernameCheckMessage);
                 }
                 else {
-                    if (checkLoginCredentials(username, password)) {
+                    if (checkLoginCredentials(username, password, true)) {
                         lblMessage.setStyle("-fx-text-fill: green;");
                         lblMessage.setText("Login successful! Proceeding to flight booking.");
                         primaryStage.close();
-                        Stage bookFlightStage = new Stage();
-                        new BookingPage().start(bookFlightStage);
+                        Stage adminPanel = new Stage();
+                        new AdminPanel().start(adminPanel);
                     } else {
                         lblMessage.setStyle("-fx-text-fill: red;");
-                        lblMessage.setText("Incorrect username or password. Please try again.");
+                        lblMessage.setText("Access Denied. You are not an admin. Please log in as a customer.");
                     }
                 }
+            }
+        });
+
+        Button btnBackToMain = new Button("Back To Main");
+        btnBackToMain.setFont(Font.font("Serif", 12));
+        btnBackToMain.setLayoutX(25);
+        btnBackToMain.setLayoutY(350);
+        btnBackToMain.setPrefSize(100, 25);
+
+        btnBackToMain.setOnAction(e -> {
+            try {
+                primaryStage.close();
+                Stage mainPageStage = new Stage();
+                new MainPage().start(mainPageStage);
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
@@ -144,12 +128,12 @@ public class LoginPage extends Application {
             }
         });
 
-        root.getChildren().addAll(txtUsername, txtPassword, btnLogin, lblTitle, lblMessage,
-                btnBackToMain, btnRegister, btnForgotPassword);
 
+        root.getChildren().addAll(txtUsername, txtPassword, btnLogin, lblTitle, lblMessage,
+                btnBackToMain, btnForgotPassword);
 
         Scene scene = new Scene(root);
-        primaryStage.setTitle("Login Page");
+        primaryStage.setTitle("Admin Login Page");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -172,17 +156,21 @@ public class LoginPage extends Application {
         return null;
     }
 
-    private boolean checkLoginCredentials(String username, String password) {
+    private boolean checkLoginCredentials(String username, String password, boolean isAdminLogin) {
         boolean isValidUser = false;
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
-            String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+            String query = "SELECT role FROM users WHERE username = ? AND password = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, username);
                 preparedStatement.setString(2, password);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
+                    String role = resultSet.getString("role");
+                    if (isAdminLogin && !"admin".equalsIgnoreCase(role)) {
+                        return false;
+                    }
                     isValidUser = true;
                 }
             }
@@ -192,9 +180,5 @@ public class LoginPage extends Application {
             System.out.println("Database connection error.");
         }
         return isValidUser;
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
