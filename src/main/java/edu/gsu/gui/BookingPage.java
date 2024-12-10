@@ -127,12 +127,10 @@ public class BookingPage extends Application {
                             txtSearchResults.setText("Selected flight does not exist.");
                             return;
                         }
-
                         if (isFlightFull(flightId)) {
                             txtSearchResults.setText("This flight is fully booked. You cannot add this flight to your bookings.");
                             return;
                         }
-
                         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
                             String getFlightTimesQuery = "SELECT departure_time, arrival_time FROM flights WHERE id = ?";
                             String newDepartureTime = null;
@@ -271,7 +269,6 @@ public class BookingPage extends Application {
         }
         return conflictExists;
     }
-
     private boolean isFlightFull(int flightId) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
             String countQuery = "SELECT COUNT(*) AS booked_count FROM reservations WHERE flight_id = ?";

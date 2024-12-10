@@ -65,6 +65,12 @@ public class AdminPanel extends Application {
 
         // Navigate to Update Flight Page
         btnUpdateFlight.setOnAction(event -> {
+            try {
+                primaryStage.close();
+                new AdminUpdateFlight().start(new Stage());
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Error navigating to Admin Update Flight Page", e);
+            }
         });
 
         // Navigate to Delete Flight Page
