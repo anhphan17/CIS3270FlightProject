@@ -20,67 +20,75 @@ public class AddFlight extends Application {
     @Override
     public void start(Stage primaryStage) {
         AnchorPane root = new AnchorPane();
-        root.setPrefSize(600, 400);
+        root.setPrefSize(600, 600);
         root.setStyle("-fx-background-color: #89CFF0;");
 
-        // Title and Header
         Label lblTitle = new Label("MIA Flights");
         lblTitle.setFont(Font.font("Serif", 50));
         lblTitle.setTextFill(javafx.scene.paint.Color.web("#fffb27"));
         lblTitle.setLayoutX(175);
         lblTitle.setLayoutY(5);
+        lblTitle.setPrefSize(411, 113);
 
-        Label lblSubtitle = new Label("Add New Flight");
+        Label lblSubtitle = new Label("Flight Booking");
         lblSubtitle.setFont(Font.font("Serif", 25));
         lblSubtitle.setTextFill(javafx.scene.paint.Color.web("#fffb27"));
-        lblSubtitle.setLayoutX(200);
+        lblSubtitle.setLayoutX(225);
         lblSubtitle.setLayoutY(60);
+        lblSubtitle.setPrefSize(200, 100);
 
-        // Input Fields
         TextField txtAirline = new TextField();
         txtAirline.setPromptText("Airline");
         txtAirline.setLayoutX(200);
-        txtAirline.setLayoutY(150);
+        txtAirline.setLayoutY(180);
+        txtAirline.setPrefSize(200, 25);
 
         TextField txtFlightNumber = new TextField();
         txtFlightNumber.setPromptText("Flight Number");
         txtFlightNumber.setLayoutX(200);
-        txtFlightNumber.setLayoutY(185);
+        txtFlightNumber.setLayoutY(210);
+        txtFlightNumber.setPrefSize(200, 25);
 
         TextField txtDepartureCity = new TextField();
         txtDepartureCity.setPromptText("Departure City");
         txtDepartureCity.setLayoutX(200);
-        txtDepartureCity.setLayoutY(220);
+        txtDepartureCity.setLayoutY(240);
+        txtDepartureCity.setPrefSize(200, 25);
 
         TextField txtDestinationCity = new TextField();
         txtDestinationCity.setPromptText("Destination City");
         txtDestinationCity.setLayoutX(200);
-        txtDestinationCity.setLayoutY(255);
+        txtDestinationCity.setLayoutY(270);
+        txtDestinationCity.setPrefSize(200, 25);
 
         TextField txtFlightDate = new TextField();
-        txtFlightDate.setPromptText("Flight Date (YYYY-MM-DD)");
+        txtFlightDate.setPromptText("Flight Date YYYY-MM-DD");
         txtFlightDate.setLayoutX(200);
-        txtFlightDate.setLayoutY(290);
+        txtFlightDate.setLayoutY(300);
+        txtFlightDate.setPrefSize(200, 25);
 
         TextField txtDepartureTime = new TextField();
-        txtDepartureTime.setPromptText("Departure Time (HH:mm)");
+        txtDepartureTime.setPromptText("Departure Time HH:MM:SS");
         txtDepartureTime.setLayoutX(200);
-        txtDepartureTime.setLayoutY(325);
+        txtDepartureTime.setLayoutY(330);
+        txtDepartureTime.setPrefSize(200, 25);
 
         TextField txtArrivalTime = new TextField();
-        txtArrivalTime.setPromptText("Arrival Time (HH:mm)");
+        txtArrivalTime.setPromptText("Arrival Time HH:MM:SS");
         txtArrivalTime.setLayoutX(200);
         txtArrivalTime.setLayoutY(360);
+        txtArrivalTime.setPrefSize(200, 25);
 
         TextField txtTotalSeats = new TextField();
         txtTotalSeats.setPromptText("Total Seats");
         txtTotalSeats.setLayoutX(200);
-        txtTotalSeats.setLayoutY(395);
+        txtTotalSeats.setLayoutY(390);
+        txtTotalSeats.setPrefSize(200, 25);
 
-        // Add Flight Button
         Button btnAddFlight = new Button("Add Flight");
-        btnAddFlight.setLayoutX(250);
-        btnAddFlight.setLayoutY(450);
+        btnAddFlight.setLayoutX(200);
+        btnAddFlight.setLayoutY(420);
+        btnAddFlight.setPrefSize(200,25);
 
         btnAddFlight.setOnAction(e -> {
             String airline = txtAirline.getText();
@@ -123,7 +131,7 @@ public class AddFlight extends Application {
         // Back Button
         Button btnBack = new Button("Back to Main Admin");
         btnBack.setLayoutX(20);
-        btnBack.setLayoutY(420);
+        btnBack.setLayoutY(500);
         btnBack.setOnAction(e -> {
             try {
                 primaryStage.close();

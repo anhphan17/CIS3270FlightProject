@@ -81,9 +81,9 @@ public class BookingPage extends Application {
 
         TextField txtUserId = new TextField();
         txtUserId.setPromptText("Enter UserId");
-        txtUserId.setLayoutX(225);
+        txtUserId.setLayoutX(200);
         txtUserId.setLayoutY(435);
-        txtFlightDate.setPrefSize(200, 25);
+        txtUserId.setPrefSize(200, 25);
 
         Button btnBackToMain = new Button("Back To Main");
         btnBackToMain.setFont(Font.font("Serif", 12));
@@ -221,7 +221,6 @@ public class BookingPage extends Application {
         primaryStage.show();
     }
 
-    // Helper method to fetch the flight_id by flight_number
     private int getFlightIdByFlightNumber(String flightNumber) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
             String query = "SELECT id FROM flights WHERE flight_number = ?";
