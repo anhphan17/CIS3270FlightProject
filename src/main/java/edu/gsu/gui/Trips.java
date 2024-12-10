@@ -18,13 +18,13 @@ public class Trips extends Application{
     private static final String DB_PASSWORD = "Mendes1998!";
     private int userId;
 
-    /*public Trips() {
+    public Trips() {
         this.userId = -1; // Default no value
     }
 
     public Trips(int userId) {
         this.userId = userId;
-    }*/
+    }
     public static void main(String[] args) {
         launch(args);}
     @Override
