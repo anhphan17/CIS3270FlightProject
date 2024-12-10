@@ -76,14 +76,30 @@ public class BookingPage extends Application {
         ComboBox<String> cmbFlightOptions = new ComboBox<>();
         cmbFlightOptions.setPromptText("Select a Flight");
         cmbFlightOptions.setLayoutX(200);
-        cmbFlightOptions.setLayoutY(410);
+        cmbFlightOptions.setLayoutY(400);
         cmbFlightOptions.setPrefSize(200,25);
+
+        TextField txtUserId = new TextField();
+        txtUserId.setPromptText("Enter UserId");
+        txtUserId.setLayoutX(225);
+        txtUserId.setLayoutY(435);
+        txtFlightDate.setPrefSize(200,25);
 
         Button btnBook = new Button("Book");
         btnBook.setFont(Font.font("Serif", 12));
         btnBook.setLayoutX(250);
-        btnBook.setLayoutY(450);
+        btnBook.setLayoutY(470);
         btnBook.setPrefSize(100,25);
+
+        btnBook.setOnAction(e -> {
+            String selectedFlight = cmbFlightOptions.getValue();
+
+            if (selectedFlight == null || selectedFlight.isEmpty()) {
+                txtSearchResults.setText("Please select a flight to book.");
+                return;
+            }
+
+        });
 
 
         btnSearch.setOnAction(event -> {
@@ -133,7 +149,7 @@ public class BookingPage extends Application {
 
 
         root.getChildren().addAll(lblTitle, lblSubtitle, txtDepartureCity, txtDestinationCity,
-                btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions, btnBook);
+                btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions, txtUserId, btnBook);
 
         Scene scene = new Scene(root);
         primaryStage.setTitle("Booking Page");
