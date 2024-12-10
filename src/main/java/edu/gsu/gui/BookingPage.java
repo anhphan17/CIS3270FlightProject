@@ -109,58 +109,65 @@ public class BookingPage extends Application {
         btnBook.setPrefSize(100, 25);
 
         btnBook.setOnAction(e -> {
-            String selectedFlight = cmbFlightOptions.getValue();
-            String userIdInput = txtUserId.getText();
+                    String selectedFlight = cmbFlightOptions.getValue();
+                    String userIdInput = txtUserId.getText();
 
-            if (selectedFlight == null || selectedFlight.isEmpty()) {
-                txtSearchResults.setText("Please select a flight to book.");
-                return;
-            }
+                    if (selectedFlight == null || selectedFlight.isEmpty()) {
+                        txtSearchResults.setText("Please select a flight to book.");
+                        return;
+                    }
 
-            try {
-                int userId = Integer.parseInt(userIdInput);
+                    try {
+                        int userId = Integer.parseInt(userIdInput);
 
-                String flightNumber = selectedFlight.split(" ")[1];
-                int flightId = getFlightIdByFlightNumber(flightNumber);
+                        String flightNumber = selectedFlight.split(" ")[1];
+                        int flightId = getFlightIdByFlightNumber(flightNumber);
 
-                if (flightId == -1) {
-                    txtSearchResults.setText("Selected flight does not exist.");
-                    return;
-                }
+                        if (flightId == -1) {
+                            txtSearchResults.setText("Selected flight does not exist.");
+                            return;
+                        }
 
-                // Check if the user has already booked this flight
-                try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
-                    String checkQuery = "SELECT * FROM reservations WHERE user_id = ? AND flight_id = ?";
-                    try (PreparedStatement checkStatement = connection.prepareStatement(checkQuery)) {
-                        checkStatement.setInt(1, userId);
-                        checkStatement.setInt(2, flightId);
+                        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
+                            String getFlightTimesQuery = "SELECT departure_time, arrival_time FROM flights WHERE id = ?";
+                            String newDepartureTime = null;
+                            String newArrivalTime = null;
 
-                        try (ResultSet resultSet = checkStatement.executeQuery()) {
-                            if (resultSet.next()) {
-                                txtSearchResults.setText("You have already booked this flight.");
+                            try (PreparedStatement timeStatement = connection.prepareStatement(getFlightTimesQuery)) {
+                                timeStatement.setInt(1, flightId);
+                                ResultSet timeResult = timeStatement.executeQuery();
+                                if (timeResult.next()) {
+                                    newDepartureTime = timeResult.getString("departure_time");
+                                    newArrivalTime = timeResult.getString("arrival_time");
+                                } else {
+                                    txtSearchResults.setText("Error retrieving flight times.");
+                                    return;
+                                }
+                            }
+
+                            if (isConflict(userId, newDepartureTime, newArrivalTime)) {
+                                txtSearchResults.setText("Time conflict detected with another booking. " +
+                                        "Please select a different flight.");
                                 return;
                             }
+
+                            String insertQuery = "INSERT INTO reservations (user_id, flight_id, flight_number) VALUES (?, ?, ?)";
+                            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+                                insertStatement.setInt(1, userId);
+                                insertStatement.setInt(2, flightId);
+                                insertStatement.setString(3, flightNumber);
+
+                                insertStatement.executeUpdate();
+                                txtSearchResults.setText("Flight booked successfully!");
+                            }
                         }
+                    } catch (NumberFormatException ex) {
+                        txtSearchResults.setText("Invalid UserID. Please enter a valid number.");
+                    } catch (Exception ex) {
+                        txtSearchResults.setText("Error booking flight: " + ex.getMessage());
+                        ex.printStackTrace();
                     }
-
-                    // Insert the reservation
-                    String insertQuery = "INSERT INTO reservations (user_id, flight_id, flight_number) VALUES (?, ?, ?)";
-                    try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
-                        insertStatement.setInt(1, userId);
-                        insertStatement.setInt(2, flightId);
-                        insertStatement.setString(3, flightNumber);
-
-                        insertStatement.executeUpdate();
-                        txtSearchResults.setText("Flight booked successfully!");
-                    }
-                }
-            } catch (NumberFormatException ex) {
-                txtSearchResults.setText("Invalid User ID. Please enter a valid number.");
-            } catch (Exception ex) {
-                txtSearchResults.setText("Error booking flight: " + ex.getMessage());
-                ex.printStackTrace();
-            }
-        });
+                });
 
         btnSearch.setOnAction(event -> {
             String departureCity = txtDepartureCity.getText();
@@ -230,5 +237,34 @@ public class BookingPage extends Application {
             e.printStackTrace();
         }
         return -1;  // Return -1 if flight is not found
+    }
+
+    private boolean isConflict(int userId, String newDepartureTime, String newArrivalTime) {
+        boolean conflictExists = false;
+
+        try (Connection connection = DriverManager.getConnection(DB_URL,DB_USERNAME,DB_PASSWORD)) {
+            String query = "SELECT * FROM reservations r " +
+                    "JOIN flights f ON r.flight_id = f.id " + "WHERE r.user_id = ? " +
+                    "AND ((f.departure_time < ? AND f.arrival_time > ?) " +
+                    "OR (f.departure_time < ? AND f.arrival_time > ?))";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, userId);
+                preparedStatement.setString(2, newArrivalTime);
+                preparedStatement.setString(3, newDepartureTime);
+                preparedStatement.setString(4, newDepartureTime);
+                preparedStatement.setString(5, newArrivalTime);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    conflictExists = true;
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Database connection error.");
+        }
+        return conflictExists;
     }
 }
