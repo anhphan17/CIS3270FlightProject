@@ -41,9 +41,9 @@ public class LoginPage extends Application {
 
         Button btnLogin = new Button("Login");
         btnLogin.setFont(Font.font("Serif", 12));
-        btnLogin.setLayoutX(268);
-        btnLogin.setLayoutY(266);
-        btnLogin.setPrefSize(81, 25);
+        btnLogin.setLayoutX(195);
+        btnLogin.setLayoutY(260);
+        btnLogin.setPrefSize(100, 25);
 
         Label lblMessage = new Label();
         lblMessage.setFont(Font.font("Serif", 12));
@@ -126,7 +126,25 @@ public class LoginPage extends Application {
         lblTitle.setLayoutY(50);
         lblTitle.setPrefSize(411, 113);
 
-        root.getChildren().addAll(txtUsername, txtPassword, btnLogin, lblTitle, lblMessage, btnBackToMain, btnRegister);
+        Button btnForgotPassword = new Button("Forgot Password");
+        btnForgotPassword.setFont(Font.font("Serif", 12));
+        btnForgotPassword.setLayoutX(305);
+        btnForgotPassword.setLayoutY(260);
+        btnForgotPassword.setPrefSize(100, 25);
+
+        btnForgotPassword.setOnAction(e -> {
+            try {
+                primaryStage.close();
+                Stage ForgotPasswordPageStage = new Stage();
+                new ForgotPassword().start(ForgotPasswordPageStage);
+            }
+            catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        });
+
+        root.getChildren().addAll(txtUsername, txtPassword, btnLogin, lblTitle, lblMessage,
+                btnBackToMain, btnRegister, btnForgotPassword);
 
 
         Scene scene = new Scene(root);
