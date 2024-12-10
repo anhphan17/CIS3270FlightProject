@@ -54,6 +54,13 @@ public class AdminPanel extends Application {
         //Add functions to buttons btn
         // Navigate to Add Flight Page
         btnAddFlight.setOnAction(event -> {
+            try {
+                primaryStage.close();
+                Stage addFlightStage = new Stage();
+                new AddFlight().start(addFlightStage);
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Error navigating to Add Flight Page", e);
+            }
         });
 
         // Navigate to Update Flight Page
