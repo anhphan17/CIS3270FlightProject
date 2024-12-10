@@ -43,11 +43,12 @@ public class Trips extends Application{
         lblTitle.setLayoutX(175);
         lblTitle.setLayoutY(10);
 
-        Label lblSubtitle = new Label("Up coming flights");
+        Label lblSubtitle = new Label("Upcoming flights");
         lblSubtitle.setFont(Font.font("Serif", 25));
         lblSubtitle.setTextFill(javafx.scene.paint.Color.web("#fffb27"));
-        lblSubtitle.setLayoutX(175);
-        lblSubtitle.setLayoutY(80);
+        lblSubtitle.setLayoutX(200);
+        lblSubtitle.setLayoutY(30);
+        lblSubtitle.setPrefSize(300, 100);
 
         ListView<String> lstBookedFlights = new ListView<>();
         lstBookedFlights.setLayoutX(50);
