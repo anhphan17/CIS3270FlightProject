@@ -46,6 +46,18 @@ public class AdminPanel extends Application {
         btnViewReservations.setLayoutY(250);
         btnViewReservations.setPrefSize(200, 25);
 
+        btnViewReservations.setOnAction(event -> {
+            try {
+                primaryStage.close();
+                Stage adminViewFlights = new Stage();
+                new AdminViewFlights().start(adminViewFlights);
+            }
+            catch (Exception ex) {
+                logger.log(Level.SEVERE, "Error navigating to View Reservations Page", ex);
+            }
+        });
+
+
         Button btnAdminLogout = new Button("Log Out");
         btnAdminLogout.setFont(Font.font("Serif", 12));
         btnAdminLogout.setLayoutX(25);
