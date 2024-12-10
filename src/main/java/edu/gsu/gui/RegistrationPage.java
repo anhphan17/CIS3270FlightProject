@@ -16,6 +16,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class RegistrationPage extends Application {
+
+    private static final String DB_URL = "jdbc:mysql://cis3270flightproject.mysql.database.azure.com:3306/project3270";
+    private static final String DB_USERNAME = "aphan17";
+    private static final String DB_PASSWORD = "Mendes1998!";
+
     @Override
     public void start(Stage primaryStage) {
         // Create the root pane
@@ -100,21 +105,12 @@ public class RegistrationPage extends Application {
         txtSecurityAnswer.setLayoutY(280);
         txtSecurityAnswer.setPrefSize(200, 25);
 
-        // Create the login button
-        Button btnRegister = new Button("Register");
-        btnRegister.setFont(Font.font("Serif", 12));
-        btnRegister.setLayoutX(250);
-        btnRegister.setLayoutY(325);
-        btnRegister.setPrefSize(100, 25);
-
-
-        // Create the label for the title
         Label lblTitle = new Label("MIA Flights");
         lblTitle.setFont(Font.font("Serif", 50));
         lblTitle.setTextFill(javafx.scene.paint.Color.web("#fffb27"));
         lblTitle.setLayoutX(175);
         lblTitle.setLayoutY(5);
-        lblTitle.setPrefSize(411, 113);
+        lblTitle.setPrefSize(400, 100);
 
         Button btnBack = new Button("Back");
         btnBack.setFont(Font.font("Serif", 12));
@@ -133,10 +129,74 @@ public class RegistrationPage extends Application {
             }
         });
 
+        Label lblMessage = new Label();
+        lblMessage.setFont(Font.font("Serif", 12));
+        lblMessage.setLayoutX(75);
+        lblMessage.setLayoutY(75);
+        lblMessage.setPrefSize(300, 10);
+        lblMessage.setStyle("-fx-text-fill: red");
+
+        Button btnRegister = new Button("Register");
+        btnRegister.setFont(Font.font("Serif", 12));
+        btnRegister.setLayoutX(250);
+        btnRegister.setLayoutY(325);
+        btnRegister.setPrefSize(100, 25);
+
+        btnRegister.setOnAction(e -> {
+            String firstName = txtFirstName.getText();
+            String lastName = txtLastName.getText();
+            String address = txtAddress.getText();
+            String zipcode = txtZipcode.getText();
+            String state = txtState.getText();
+            String username = txtUsername.getText();
+            String password = txtPassword.getText();
+            String email = txtEmail.getText();
+            String ssn = txtSSN.getText();
+            String securityQuestion = cmbSecurityQuestion.getValue();
+            String securityAnswer = txtSecurityAnswer.getText();
+
+            if (firstName.isEmpty() || lastName.isEmpty() || address.isEmpty() || zipcode.isEmpty() ||
+                    state.isEmpty() || username.isEmpty() || password.isEmpty() || email.isEmpty() || ssn.isEmpty() ||
+                    securityQuestion == null || securityAnswer.isEmpty()) {
+                lblMessage.setText("Please fill out all fields to register.");
+                return;
+            }
+
+            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
+                String query = "INSERT INTO users (first_name, last_name, address, zip_code, state, username, " +
+                        "password, email, ssn, security_question, security_answer)" +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                    preparedStatement.setString(1, firstName);
+                    preparedStatement.setString(2, lastName);
+                    preparedStatement.setString(3, address);
+                    preparedStatement.setString(4, zipcode);
+                    preparedStatement.setString(5, state);
+                    preparedStatement.setString(6, username);
+                    preparedStatement.setString(7, password);
+                    preparedStatement.setString(8, email);
+                    preparedStatement.setString(9, ssn);
+                    preparedStatement.setString(10, securityQuestion);
+                    preparedStatement.setString(11, securityAnswer);
+                    preparedStatement.executeUpdate();
+
+                    lblMessage.setStyle("-fx-text-fill: green");
+                    lblMessage.setText("Registration successful!");
+                    primaryStage.close();
+                    Stage bookFlightStage = new Stage();
+                    new BookingPage().start(bookFlightStage);
+                }
+            }
+            catch (Exception ex) {
+                lblMessage.setText("Error registering user: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        });
+
         // Add all nodes to the root pane
         root.getChildren().addAll(txtFirstName, txtLastName, txtAddress, txtZipcode,
                 txtState, txtUsername, txtPassword, txtEmail, txtSSN,
-                cmbSecurityQuestion, txtSecurityAnswer, btnRegister, lblTitle, btnBack);
+                cmbSecurityQuestion, txtSecurityAnswer, btnRegister, lblTitle, btnBack, lblMessage);
 
         // Set the scene and stage
         Scene scene = new Scene(root);
