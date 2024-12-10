@@ -84,7 +84,7 @@ public class Trips extends Application{
             try {
                 primaryStage.close();
                 Stage bookingPageStage = new Stage();
-                new BookingPage().start(bookingPageStage); // Use default constructor
+                new BookingPage(userId).start(bookingPageStage); // Use default constructor
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -98,7 +98,8 @@ public class Trips extends Application{
             try {
                 primaryStage.close();
                 Stage bookingPageStage = new Stage();
-                new BookingPage().start(bookingPageStage); // Use default constructor
+                BookingPage bookingPage = new BookingPage(userId);
+                bookingPage.start(bookingPageStage);// Use default constructor
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

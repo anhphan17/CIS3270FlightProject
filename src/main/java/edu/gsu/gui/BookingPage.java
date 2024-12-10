@@ -18,11 +18,11 @@ public class BookingPage extends Application {
     private static final String DB_USERNAME = "aphan17";
     private static final String DB_PASSWORD = "Mendes1998!";
 
-    /*private int userId;
+    private int userId;
 
     public BookingPage(int userId) {
         this.userId = userId;
-    }*/
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -85,11 +85,11 @@ public class BookingPage extends Application {
         cmbFlightOptions.setLayoutY(400);
         cmbFlightOptions.setPrefSize(200, 25);
 
-        TextField txtUserId = new TextField();
+        /*TextField txtUserId = new TextField();
         txtUserId.setPromptText("Enter UserId");
         txtUserId.setLayoutX(200);
         txtUserId.setLayoutY(435);
-        txtUserId.setPrefSize(200, 25);
+        txtUserId.setPrefSize(200, 25);*/
 
         Button btnBackToMain = new Button("Back To Main");
         btnBackToMain.setFont(Font.font("Serif", 12));
@@ -118,7 +118,7 @@ public class BookingPage extends Application {
             try {
                 primaryStage.close();
                 Stage tripsStage = new Stage();
-                new Trips().start(tripsStage); // Ensure userId is passed
+                new Trips(userId).start(tripsStage); // Ensure userId is passed
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -132,7 +132,6 @@ public class BookingPage extends Application {
 
         btnBook.setOnAction(e -> {
                     String selectedFlight = cmbFlightOptions.getValue();
-                    String userIdInput = txtUserId.getText();
 
                     if (selectedFlight == null || selectedFlight.isEmpty()) {
                         txtSearchResults.setText("Please select a flight to book.");
@@ -140,8 +139,6 @@ public class BookingPage extends Application {
                     }
 
                     try {
-                        int userId = Integer.parseInt(userIdInput);
-
                         String flightNumber = selectedFlight.split(" ")[1];
                         int flightId = getFlightIdByFlightNumber(flightNumber);
 
@@ -238,7 +235,7 @@ public class BookingPage extends Application {
         });
 
         root.getChildren().addAll(lblTitle, lblSubtitle, txtDepartureCity, txtDestinationCity,
-                btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions, txtUserId, btnBook, btnBackToMain, btnViewTrips);
+                btnSearch, txtFlightDate, txtSearchResults, cmbFlightOptions /*txtUserId*/, btnBook, btnBackToMain, btnViewTrips);
 
         Scene scene = new Scene(root);
         primaryStage.setTitle("Booking Page");

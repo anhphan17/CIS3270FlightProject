@@ -178,13 +178,21 @@ public class RegistrationPage extends Application {
                     preparedStatement.setString(9, ssn);
                     preparedStatement.setString(10, securityQuestion);
                     preparedStatement.setString(11, securityAnswer);
-                    preparedStatement.executeUpdate();
+                    int rowsAffected = preparedStatement.executeUpdate();
 
-                    lblMessage.setStyle("-fx-text-fill: green");
-                    lblMessage.setText("Registration successful!");
-                    primaryStage.close();
-                    Stage bookFlightStage = new Stage();
-                    new BookingPage().start(bookFlightStage);
+                    if (rowsAffected > 0) {
+                        try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                            if (generatedKeys.next()) {
+                                int userId = generatedKeys.getInt(1);
+                                lblMessage.setStyle("-fx-text-fill: green");
+                                lblMessage.setText("Registration successful!");
+                                primaryStage.close();
+
+                                Stage bookFlightStage = new Stage();
+                                new BookingPage(userId).start(bookFlightStage);
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex) {
