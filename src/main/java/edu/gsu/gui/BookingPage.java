@@ -271,6 +271,7 @@ public class BookingPage extends Application {
         }
         return conflictExists;
     }
+
     private boolean isFlightFull(int flightId) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
             String countQuery = "SELECT COUNT(*) AS booked_count FROM reservations WHERE flight_id = ?";
