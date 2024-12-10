@@ -142,7 +142,7 @@ public class Flight {
             bookedSeats++;
         }
         else {
-            throw new RuntimeException("FLight is fully booked.")
+            throw new RuntimeException("FLight is fully booked.");
         }
     }
 }
