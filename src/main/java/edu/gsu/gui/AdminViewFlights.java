@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -38,7 +39,6 @@ public class AdminViewFlights extends Application {
         lblTitle.setPrefSize(400, 100);
 
         TextArea txtViewFlights = new TextArea();
-        txtViewFlights.setText("View Flights");
         txtViewFlights.setLayoutX(100);
         txtViewFlights.setLayoutY(150);
         txtViewFlights.setPrefSize(400, 100);
@@ -54,7 +54,7 @@ public class AdminViewFlights extends Application {
             try {
                 primaryStage.close();
                 Stage adminMainPage = new Stage();
-                new AdminPanel().start(primaryStage);
+                new AdminPanel().start(adminMainPage);
             }
             catch (Exception ex) {
                 ex.printStackTrace();

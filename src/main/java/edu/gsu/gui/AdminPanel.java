@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.util.logging.Logger;
@@ -18,14 +19,12 @@ public class AdminPanel extends Application {
         root.setPrefSize(600, 400);
         root.setStyle("-fx-background-color: #89CFF0;");
 
-        // Header
         Label lblTitle = new Label("MIA Flights");
         lblTitle.setFont(Font.font("Serif", 50));
         lblTitle.setTextFill(javafx.scene.paint.Color.web("#fffb27"));
         lblTitle.setLayoutX(175);
         lblTitle.setLayoutY(10);
 
-        //Add buttons for admin functions
         Button btnAddFlight = new Button("Add Flight");
         btnAddFlight.setLayoutX(200);
         btnAddFlight.setLayoutY(100);
@@ -35,6 +34,15 @@ public class AdminPanel extends Application {
         btnUpdateFlight.setLayoutX(200);
         btnUpdateFlight.setLayoutY(150);
         btnUpdateFlight.setPrefSize(200, 25);
+
+        btnUpdateFlight.setOnAction(event -> {
+            try {
+                primaryStage.close();
+                new AdminUpdateFlight().start(new Stage());
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Error navigating to Admin Update Flight Page", e);
+            }
+        });
 
         Button btnDeleteFlight = new Button("Delete Flight");
         btnDeleteFlight.setLayoutX(200);
@@ -46,14 +54,12 @@ public class AdminPanel extends Application {
         btnViewReservations.setLayoutY(250);
         btnViewReservations.setPrefSize(200, 25);
 
-        btnViewReservations.setOnAction(event -> {
+        btnViewReservations.setOnAction(e -> {
             try {
                 primaryStage.close();
-                Stage adminViewFlights = new Stage();
-                new AdminViewFlights().start(adminViewFlights);
-            }
-            catch (Exception ex) {
-                logger.log(Level.SEVERE, "Error navigating to View Reservations Page", ex);
+                new AdminViewFlights().start(new Stage());
+            } catch (Exception ex) {
+                logger.log(Level.SEVERE, "Error navigating to Admin Update Flight Page", e);
             }
         });
 
@@ -80,29 +86,21 @@ public class AdminPanel extends Application {
         btnBackToMenu.setLayoutY(300);
         btnBackToMenu.setPrefSize(200, 25);
 
-        //Add functions to buttons btn
-        // Navigate to Add Flight Page
         btnAddFlight.setOnAction(event -> {
             try {
                 primaryStage.close();
-                Stage addFlightStage = new Stage();
-                new AddFlight().start(addFlightStage);
-            } catch (Exception e) {
-                logger.log(Level.SEVERE, "Error navigating to Add Flight Page", e);
+                Stage adminAddFlight = new Stage();
+                new AddFlight().start(adminAddFlight);
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
-        // Navigate to Update Flight Page
-        btnUpdateFlight.setOnAction(event -> {
-            try {
-                primaryStage.close();
-                new AdminUpdateFlight().start(new Stage());
-            } catch (Exception e) {
-                logger.log(Level.SEVERE, "Error navigating to Admin Update Flight Page", e);
-            }
-        });
 
-        // Navigate to Delete Flight Page
+
+
+
         btnDeleteFlight.setOnAction(event -> {
             try {
                 primaryStage.close();
@@ -126,6 +124,7 @@ public class AdminPanel extends Application {
         });
 
         // Add components to the root pane
+
         root.getChildren().addAll(lblTitle, btnAddFlight, btnUpdateFlight, btnDeleteFlight, btnViewReservations,
                 btnBackToMenu, btnAdminLogout);
 
