@@ -109,9 +109,12 @@ public class LoginPage extends Application {
                     if (checkLoginCredentials(username, password)) {
                         lblMessage.setStyle("-fx-text-fill: green;");
                         lblMessage.setText("Login successful! Proceeding to flight booking.");
+
+                        int userId = getUserIdByUsername(username);
+
                         primaryStage.close();
-                        Stage bookFlightStage = new Stage();
-                        new BookingPage().start(bookFlightStage);
+                        Stage tripsStage = new Stage();
+                        new Trips(userId).start(tripsStage);
                     } else {
                         lblMessage.setStyle("-fx-text-fill: red;");
                         lblMessage.setText("Incorrect username or password. Please try again.");
@@ -192,6 +195,26 @@ public class LoginPage extends Application {
             System.out.println("Database connection error.");
         }
         return isValidUser;
+    }
+
+    private int getUserIdByUsername(String username) {
+        int userId = -1;
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
+            String query = "SELECT id FROM users WHERE username = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, username);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    userId = resultSet.getInt("id");
+                }
+            }
+        }
+        catch (Exception e) {
+            e. printStackTrace();
+            System.out.println("Database connection error.");
+        }
+        return userId;
     }
 
     public static void main(String[] args) {
