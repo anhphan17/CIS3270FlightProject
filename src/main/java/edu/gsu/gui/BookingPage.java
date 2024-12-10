@@ -85,11 +85,6 @@ public class BookingPage extends Application {
         cmbFlightOptions.setLayoutY(400);
         cmbFlightOptions.setPrefSize(200, 25);
 
-        /*TextField txtUserId = new TextField();
-        txtUserId.setPromptText("Enter UserId");
-        txtUserId.setLayoutX(200);
-        txtUserId.setLayoutY(435);
-        txtUserId.setPrefSize(200, 25);*/
 
         Button btnBackToMain = new Button("Back To Main");
         btnBackToMain.setFont(Font.font("Serif", 12));
