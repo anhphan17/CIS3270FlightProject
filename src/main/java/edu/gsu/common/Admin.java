@@ -9,14 +9,11 @@ public class Admin extends User {
 
     }
 
-
-    // Method to add a new flight
     public void addFlight(Flight flight, ArrayList<Flight> flightList) {
         flightList.add(flight);
         System.out.println("Flight added: " + flight);
     }
 
-    // Method to remove a flight
     public void removeFlight(Flight flight, ArrayList<Flight> flightList) {
         flightList.remove(flight);
         System.out.println("Flight removed: " + flight);

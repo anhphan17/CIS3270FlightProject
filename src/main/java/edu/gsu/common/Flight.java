@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 public class Flight {
+    private int flightId;
     private String airLine;
     private int flightNumber;
     private String DepartureCity;
@@ -10,6 +11,8 @@ public class Flight {
     private String flightDate;
     private String DepartureTime;
     private String ArrivalTime;
+    private int capacity;
+    private int bookedSeats;
 
     public Flight(String airline, int flightNumber, String departureCity, String destinationCity,
                   String flightDate, String departureTime, String arrivalTime) {
@@ -79,6 +82,29 @@ public class Flight {
         return this.ArrivalTime;
     }
 
+    public int getFlightId() {
+        return flightId;
+    }
+
+    public void setFlightId(int flightId) {
+        this.flightId = flightId;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getBookedSeats(){
+        return bookedSeats;
+    }
+    public void setBookedSeats(int bookedSeats) {
+        this.bookedSeats = bookedSeats;
+    }
+
     @Override
     public String toString() {
         return "Flight [Airline=" + airLine + ", FlightNumber=" + flightNumber +
@@ -87,7 +113,7 @@ public class Flight {
                 ", ArrivalTime=" + ArrivalTime + "]";
     }
 
-    // Convenience Method: Check if two flights have the same route
+
     public boolean isSameRoute(Flight other) {
         return this.DepartureCity.equalsIgnoreCase(other.DepartureCity) &&
                 this.DestinationCity.equalsIgnoreCase(other.DestinationCity);
@@ -99,6 +125,25 @@ public class Flight {
         LocalDateTime otherDeparture = LocalDateTime.parse(other.flightDate + " " + other.DepartureTime, formatter);
         LocalDateTime otherArrival = LocalDateTime.parse(other.flightDate + " " + other.ArrivalTime, formatter);
     return (thisDeparture.isBefore(otherArrival)&& thisArrival.isAfter(otherDeparture));
+    }
+
+    public void cancelSeat() {
+        if (bookedSeats > 0) {
+            bookedSeats--;
+        }
+    }
+
+    public boolean isAvailable() {
+        return bookedSeats < capacity;
+    }
+
+    public void bookSeat() {
+        if (isAvailable()) {
+            bookedSeats++;
+        }
+        else {
+            throw new RuntimeException("FLight is fully booked.")
+        }
     }
 }
 

@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Reservation {
     private String reservationId;
     private Customer customer;
-    private Flight flight;
+    private Flight flightNumber;
     private String confirmationNumber;
 
     //list of reservations
@@ -11,10 +11,10 @@ public class Reservation {
     private static int reservationCounter = 1;
 
     //constructor reservation
-    public Reservation(String reservationId,Customer customer, Flight flight, String confirmationNumber){
+    public Reservation(String reservationId,Customer customer, Flight flightNumber, String confirmationNumber){
         this.reservationId = reservationId;
         this.customer = customer;
-        this.flight = flight;
+        this.flightNumber = flightNumber;
         this.confirmationNumber = confirmationNumber;
         reservationList.add(this);
     }
@@ -31,11 +31,11 @@ public class Reservation {
     public void setCustomer(Customer customer){
         this.customer = customer;
     }
-    public Flight getFlight(){
-        return flight;
+    public Flight getFlightNumber(){
+        return flightNumber;
     }
-    public void setFlight(Flight flight){
-        this.flight = flight;
+    public void setFlightNumber(Flight flightNumber){
+        this.flightNumber = flightNumber;
     }
     public String getConfirmationNumber(){
         return confirmationNumber;
@@ -44,7 +44,8 @@ public class Reservation {
         this.confirmationNumber = confirmationNumber;
     }
 
-    //add a trip to account
+
+
     public static String addTrip (Customer customer, String confirmationNumber, String lastName, Flight flight){
         if (!customer.getLastname().equalsIgnoreCase(lastName)){
             return "Your last name or Confirmation Number does not match";
@@ -81,6 +82,10 @@ public class Reservation {
             }
         }
         return false;
+    }
+
+    private Flight getFlight() {
+        return flightNumber;
     }
 }
 

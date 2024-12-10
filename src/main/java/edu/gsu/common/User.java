@@ -38,6 +38,9 @@ public abstract class User {
         this.role = role;
     }
 
+    public User(String username, String password, String email, String securityQuestion, String securityAnswer) {
+    }
+
     public String getRole() {
         return role;
     }
@@ -148,11 +151,10 @@ public abstract class User {
         this.securityAnswer = securityAnswer;
     }
 
-    // (Polymorphism can extend this) GO BACK AND LOOK
-    // FOR ADMIN, ADD POSSIBLE ADMINKEY THAT SHOWS TRUE ADMIN LOGIN
     public boolean login(String username, String password) {
         return this.username.equals(username) && this.password.equals(password);
     }
+
 
     @Override
     public String toString() {
@@ -162,4 +164,10 @@ public abstract class User {
                 ", Email: " + email +
                 ", Role: " + role;
     }
+
+    public abstract String getLastname();
+
+    public abstract void setFirstname(String firstname);
+
+    public abstract void setLastname(String lastname);
 }
