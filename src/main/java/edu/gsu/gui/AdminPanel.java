@@ -111,7 +111,14 @@ public class AdminPanel extends Application {
         });
 
         // Navigate to View Reservations Page
-        btnViewReservations.setOnAction(event -> {
+        btnViewReservations.setOnAction(e -> {
+            try {
+                primaryStage.close();
+                Stage viewReservationsStage = new Stage();
+                new AdminViewFlights().start(viewReservationsStage); // Open the AdminViewFlights page
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
         btnBackToMenu.setOnAction(event -> {
