@@ -22,9 +22,9 @@ public class Trips extends Application{
     private static final String DB_PASSWORD = "Mendes1998!";
     private int userId;
 
-    public Trips() {
+    /*public Trips() {
         this.userId = -1; // Default no value
-    }
+    }*/
 
     public Trips(int userId) {
         this.userId = userId;
@@ -54,6 +54,7 @@ public class Trips extends Application{
         lstBookedFlights.setLayoutY(150);
         lstBookedFlights.setPrefSize(500, 150);
 
+        loadUserTrips(lstBookedFlights);
 
         // Cancel Booking
         Button btnCancelBooking = new Button("Cancel Booking");
@@ -84,7 +85,7 @@ public class Trips extends Application{
             try {
                 primaryStage.close();
                 Stage bookingPageStage = new Stage();
-                new BookingPage(userId).start(bookingPageStage); // Use default constructor
+                new BookingPage(this.userId).start(bookingPageStage); // Use default constructor
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -98,8 +99,7 @@ public class Trips extends Application{
             try {
                 primaryStage.close();
                 Stage bookingPageStage = new Stage();
-                BookingPage bookingPage = new BookingPage(userId);
-                bookingPage.start(bookingPageStage);// Use default constructor
+                new BookingPage(this.userId).start(bookingPageStage); // Use default constructor
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -128,7 +128,24 @@ public class Trips extends Application{
 
         loadBookedFlights(lstBookedFlights);
     }
+    private  void loadUserTrips(ListView<String> lstBookedFlights) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
+            String query = "SELECT flight_number FROM reservations WHERE user_id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, userId);
 
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    String flightName = resultSet.getString("flight_number");
+                    lstBookedFlights.getItems().add(flightName);
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Database connection error.");
+        }
+    }
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
