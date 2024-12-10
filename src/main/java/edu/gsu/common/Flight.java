@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 public class Flight {
     private int flightId;
     private String airLine;
-    private int flightNumber;
+    private String flightNumber;
     private String DepartureCity;
     private String DestinationCity;
     private String flightDate;
@@ -14,7 +14,7 @@ public class Flight {
     private int capacity;
     private int bookedSeats;
 
-    public Flight(String airline, int flightNumber, String departureCity, String destinationCity,
+    public Flight(String airline, String flightNumber, String departureCity, String destinationCity,
                   String flightDate, String departureTime, String arrivalTime) {
         this.airLine = airline;
         this.flightNumber = flightNumber;
@@ -35,11 +35,11 @@ public class Flight {
     }
 
 
-    public void setFlightNumber(int fl) {
+    public void setFlightNumber(String fl) {
         this.flightNumber = fl;
     }
-    public int getFlightNumber() {
-        return this.flightNumber;
+    public String getFlightNumber() {
+        return flightNumber;
     }
 
 

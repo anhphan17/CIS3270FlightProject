@@ -12,6 +12,21 @@ public class Customer extends User{
         super(username, password, email, securityQuestion, securityAnswer);
     }
 
+    @Override
+    public String getLastname() {
+        return "";
+    }
+
+    @Override
+    public void setFirstname(String firstname) {
+
+    }
+
+    @Override
+    public void setLastname(String lastname) {
+
+    }
+
     public void SearchFlights(String departureCity, String destinationCity) {
 
     }
